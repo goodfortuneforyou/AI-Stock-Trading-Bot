@@ -1,1 +1,1 @@
-# AI-Stock-Trading-Bot
+# AI-Stock-Trading-Bot - May 2024
