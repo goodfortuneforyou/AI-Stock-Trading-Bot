@@ -9,6 +9,11 @@ from timedelta import Timedelta
 from finbert_utils import estimate_sentiment
 import os
 
+# lumibot is a trading library that allows you to backtest and trade stocks using a variety of strategies.
+# Alpaca is a brokerage that allows you to trade stocks using an API and provides a paper trading environment.
+# YahooDataBacktesting is a class that allows you to backtest a strategy using historical stock data from Yahoo Finance.
+# This strategy uses finbert_utils to estimate the sentiment of news articles and uses that to determine if it should buy or sell a stock.
+
 # load in my env variable
 load_dotenv("info.env")
 

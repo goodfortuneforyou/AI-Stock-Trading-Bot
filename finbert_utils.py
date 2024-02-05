@@ -1,3 +1,5 @@
+# this is a model that uses pytorch that uses sentiment analysis on news articles from specified stocks and
+# dates to determine if there is a positive or negative sentiment.
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from typing import Tuple 
