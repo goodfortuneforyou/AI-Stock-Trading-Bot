@@ -3,10 +3,16 @@ from flask_cors import CORS
 from flask_pymongo import PyMongo
 from bson import ObjectId
 from flask import Flask, jsonify, request
+from dotenv import load_dotenv
+import os
+
+load_dotenv("info.env")
+
+MONGO_URI = os.getenv('MONGO_URI')
 
 app = Flask(__name__)
 CORS(app)
-app.config["MONGO_URI"] = "mongodb+srv://anjolie-4200:6fKEM2Twx6YsxGtp@atlascluster.qslnfwu.mongodb.net/Stock-App?retryWrites=true&w=majority"
+app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
 
 users = mongo.db.users
@@ -40,7 +46,7 @@ def get_user(id):
         return jsonify({'error': str(e)}), 500
 
 
-from flask import request
+
 
 @app.route('/users', methods=['POST'])
 def create_user():
@@ -95,6 +101,20 @@ def update_user(id):
             return jsonify({'error': 'User not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/login', methods=['GET'])
+def login():
+    try:
+        email = request.args.get('email')
+        user = users.find_one({'email': email})
+        if user:
+            return jsonify({'message': 'User exists'}), 200
+        else:
+            return jsonify({'message': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 if __name__ == '__main__':
