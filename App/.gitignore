@@ -1,3 +1,4 @@
 #alpaca environment variables
 info.env
 /logs
+/venv

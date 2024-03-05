@@ -8,7 +8,7 @@ from lumibot.backtesting import YahooDataBacktesting
 from datetime import datetime
 from timedelta import Timedelta
 from alpaca_trade_api import REST
-from finbert_utils import estimate_sentiment
+from App.backend.finbert_model import estimate_sentiment
 import os
 
 # Load in environment variables
@@ -78,5 +78,4 @@ if __name__ == "__main__":
         start_date,
         end_date,
         benchmark_asset="AMZN",
-
     )

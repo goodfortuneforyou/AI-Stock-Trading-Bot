@@ -10,8 +10,6 @@ device = "cuda:0" if torch.cuda.is_available() else "cpu"
 # load the model and tokenizer
 tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
 model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert").to(device)
-
-#
 labels = ["positive", "negative", "neutral"]
 
 def estimate_sentiment(news):
