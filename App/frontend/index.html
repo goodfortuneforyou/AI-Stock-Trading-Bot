@@ -2,12 +2,198 @@
 <html>
   <head>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Knewave"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="app">
-      <div class="title"><h1>Hello, {{ user }}</h1></div>
+      <!-- this is my Vue app-->
+      <div id="LoginBox">
+        <div id="login">
+          <div id="loginImage">
+            <img src="IntelliTrader.png" alt="TravelPal" class="hero-image" />
+          </div>
+
+          <div v-if="validationErrors">
+            Please correct the following error(s):
+            <ul>
+              <li v-for="error in errorMessages">{{error}}</li>
+            </ul>
+          </div>
+          <!-- vmodel only for input when data is being sent back to code-->
+          <div id="new-user-inputs">
+            <p style="padding-bottom: -40px"><div id="question" style="padding-bottom: 40px;"> Welcome! Sign up to start your journey.</div></p>
+
+            <div id="input_box">
+              <label>
+                Name
+              </label>
+            </div>
+                <br />
+                <input
+                  type="text"
+                  placeholder="Username"
+                  v-model="newUserName"
+                />
+            <br />
+            <br />
+            <div id="input_box">
+              <label>
+                Email
+              </label>
+            </div>
+                <br />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  v-model="newUserEmail"
+                />
+            <br />
+            <br />
+            <div id="input_box">
+              <label>
+                Password
+              </label>
+            </div>
+               <br />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  v-model="newUserPassword"
+                />
+            <br />
+            <br />
+            <button v-on:click="addUser">Sign Up</button>
+            <br />
+            <p style="margin-bottom: 30px"><div id="question"> Already have an account?</div></p>
+            <br /><br />
+            <button v-on:click="displayLogin">Log In</button>
+          </div>
+          <div id="returning-user-inputs">
+            <p style="padding-bottom: -40px"><div id="question" style="padding-bottom: 40px;">Welcome back! Login to continue your journey.</div></p>
+            <div id="input_box">
+              <label>
+                Email
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  v-model="returningUserEmail"
+                />
+              </label>
+            </div>
+            <br />
+            <div id="input_box">
+              <label>
+                Password
+                <input
+                  type="password"
+                  placeholder="Enter your password"
+                  v-model="returningUserPassword"
+                />
+              </label>
+            </div>
+            <br />
+            <br />
+            <button v-on:click="loginUser">Log In</button>
+          </div>
+        </div>
+      </div>
+      <div id="homePage">
+        <div id="HomeBox">
+          <div class="row">
+            <img src="IntelliTrader.png" alt="TravelPal" class="hero-image" />
+          </div>
+          <div class="row">
+            <div id="info-box">
+              <div id="userInfo">
+                <br />
+                <br />
+
+                <h2 style="display:grid;justify-content: center;">User Info:</h2>
+                  <div id="user-info">
+                    <p>Name: {{ userInfo.name }}</p>
+                    <p>Email: {{ userInfo.email }}</p>
+                    <br />
+                    <button id="add" v-on:click="displayInput">edit</button>
+                  </div>
+                  <div id="edit-info">
+                    <input id="nameInput" type="text" v-model="userInfoName" />
+                    <input id="emailInput" type="email" v-model="userInfoEmail" />
+                    <br />
+                    <button id="add" v-on:click="updateUserInformation">save</button>
+                  </div>
+                <br />
+                  <button id="add" v-on:click="signOut">sign out</button>
+                <br />
+              </div>
+            </div>
+            <div id="new-investment-input">
+              <br />
+              <br />
+              <p><div id="question">Where would you like to go next?</div></p>
+              <br />
+              <div id="input_box">
+                <label>
+                  investment:
+                  <input
+                    type="text"
+                    placeholder="Enter a investment"
+                    v-model="newInvestment"
+                  />
+                </label>
+              </div>
+              <br />
+              <br />
+              <button id="add" v-on:click="addInvestment">
+                Add Investment
+              </button>
+              <div id="investments">
+                <ul>
+                  <li id="list-item" v-for="investment in investments">
+                    {{ investment }}
+                    <button v-on:click="removeInvestment(investment)">
+                      <img id="trash" src="trash.png" alt="delete" />
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div id="new-preference-input">
+              <br />
+              <br />
+              <p><div id="question">What are you preferenceed in?</div></p>
+              <br />
+              <div id="input_box">
+                <label>
+                  preference:
+                  <input
+                    type="text"
+                    placeholder="Enter an preference"
+                    v-model="newPreference"
+                  />
+                </label>
+              </div>
+              <br />
+              <br />
+              <button id="add" v-on:click="addPreference">Add preference</button>
+              <div id="preferences">
+                <ul>
+                  <li id="list-item" v-for="preference in preferences">
+                    {{ preference }}
+                    <button v-on:click="removePreference(preference)">
+                      <img id="trash" src="trash.png" alt="delete" />
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script src="app.js"></script>
+    <script src="vue.js"></script>
   </body>
 </html>

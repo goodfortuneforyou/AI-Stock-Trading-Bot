@@ -32,9 +32,8 @@ def get_users():
         
     return jsonify(user_list)
 
-
 @app.route('/users/<string:id>')
-def get_user(id):
+def get_user_by_id(id):
     try:
         user = mongo.db.users.find_one({'_id': ObjectId(id)})
         if user:
@@ -46,9 +45,22 @@ def get_user(id):
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/users/login')
+def get_user(email):
+    try:
+        user = mongo.db.users.find_one({email: ObjectId(email)})
+        if user:
+            user['_id'] = str(user['_id'])
+            return jsonify(user), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
-@app.route('/users', methods=['POST'])
+
+
+@app.route('/users/signup', methods=['POST'])
 def create_user():
     try:
         name = request.form.get('name')
@@ -60,7 +72,6 @@ def create_user():
             'name': name,
             'email': email,
             'password': password,
-            'symbols': []
         }
         inserted_user = mongo.db.users.insert_one(new_user)
         user_id = inserted_user.inserted_id
@@ -115,7 +126,30 @@ def login():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/users/<string:id>/investments',)
+def get_investments(id):
+    try:
+        user = mongo.db.users.find_one({'_id': ObjectId(id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            return jsonify(user['investments']), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
+    
+@app.route('/users/<string:id>/preferences')
+def get_preferences(id):
+    try:
+        user = mongo.db.users.find_one({'_id': ObjectId(id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            return jsonify(user['preferences']), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
