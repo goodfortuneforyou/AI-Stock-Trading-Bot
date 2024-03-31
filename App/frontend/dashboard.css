@@ -52,7 +52,7 @@ html {
   display: flex;
   margin-left: -150px;
   justify-content: space-between;
-  padding: 30px;
+  padding: 25px;
   a {
     text-decoration: none;
     color: #ffffff;
@@ -123,9 +123,9 @@ html {
 .dashboard_text {
   font-family: "Roboto", sans-serif;
   font-style: italic;
-  font-size: 40px;
+  font-size: 35px;
   color: #ffffff;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 50px;
 }
 
@@ -144,10 +144,6 @@ html {
   background-color: rgba(119, 255, 228, 0.7);
   transition: background-color 1s ease;
 }
-.row a:focus {
-  background-color: rgba(119, 255, 228, 0.7);
-  transition: background-color 1s ease;
-}
 
 .graph {
   margin-left: auto;
@@ -155,7 +151,7 @@ html {
   display: block;
   margin-top: 40px;
   height: 30vh;
-  width: 31vw;
+  width: 28vw;
 }
 
 .stock_status_text_symbol {
@@ -198,7 +194,7 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 33vh;
+  height: 36vh;
   width: 100vw;
   overflow: auto;
   border-radius: 10px;
@@ -292,7 +288,7 @@ html {
 }
 .transaction_box {
   padding: 30px;
-  height: 5vh;
+  height: 6vh;
   width: 15vw;
   overflow: auto;
   border-radius: 10px;
