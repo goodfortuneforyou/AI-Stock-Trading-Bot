@@ -422,6 +422,16 @@ Vue.createApp({
       this.newUserEmail = "";
       this.newUserName = "";
     },
+
+    loadingPage: function () {
+      document.addEventListener("readystatechange", (event) => {
+        if (event.target.readyState === "loading") {
+          document.getElementById("socket").style.display = "block";
+        } else if (event.target.readyState === "complete") {
+          document.getElementById("socket").style.display = "none";
+        }
+      });
+    },
   },
 
   computed: {
