@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+    <script type="module" defer src="./index.ts"></script>
   </head>
   <body>
     <div id="app">
@@ -21,20 +22,7 @@
           </div>
           <!-- vmodel only for input when data is being sent back to code-->
           <div id="new-user-inputs">
-            <div id="login_title">Register</div>
-
-            <label> Name </label>
-            <br />
-            <br />
-            <input type="text" placeholder="Username" v-model="newUserName" />
-            <br />
-            <br />
-            <label> Birthday </label>
-            <br />
-            <br />
-            <input type="date" v-model="newUserBirthday" />
-            <br />
-            <br />
+            <div id="login_title">Login</div>
             <label> Email </label>
             <br />
             <br />
@@ -52,16 +40,13 @@
           </div>
           <br />
           <br />
-          <div id="LoginBox">
-            <button v-on:click="addUser">Sign Up</button>
-
-            <br />
-            <br />
-            <br />
-            <div id="question">
-              Already have an account?
-              <a href="login.html" class="sign_in_link">sign in</a>
-            </div>
+          <button v-on:click="addUser">Login</button>
+          <br />
+          <br />
+          <br />
+          <div id="question">
+            Don't have an account?
+            <a href="signup.html" class="sign_in_link">sign up</a>
           </div>
         </div>
       </div>

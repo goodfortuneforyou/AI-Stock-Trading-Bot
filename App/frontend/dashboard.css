@@ -14,6 +14,7 @@ html {
   padding: 20px;
   margin-top: 10px;
 }
+
 .not_rounded_column_container {
   height: 92vh;
   width: 40vw;
@@ -112,7 +113,6 @@ html {
   display: block;
   margin: 0 auto;
   text-decoration: none;
-
   font-family: "Roboto", sans-serif;
   font-weight: 900;
   font-style: italic;
