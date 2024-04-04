@@ -16,7 +16,21 @@ button {
   font-weight: 600;
   cursor: pointer;
   display: block;
-  margin-left: 150px;
+  margin-left: 80px;
+}
+
+.error_messages {
+  color: rgb(199, 64, 64);
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding-left: 80px;
+  padding-bottom: 10px;
+}
+
+.error_messages li {
+  list-style: none;
+  margin-left: -40px;
 }
 
 .sign_in_link {
@@ -25,7 +39,7 @@ button {
 }
 
 #new-user-inputs {
-  margin-left: 150px;
+  margin-left: 80px;
 }
 
 h2 {
@@ -33,9 +47,9 @@ h2 {
   color: rgb(97, 130, 109);
 }
 
-input {
+#login input {
   padding: 11px;
-  width: 60vh;
+  width: 80%;
   background-color: #a3a2a2;
   border-radius: 5px;
   border: none;
@@ -85,7 +99,7 @@ li {
   font-weight: 500;
   font-style: italic;
   font-size: 15px;
-  padding-left: 150px;
+  padding-left: 80px;
 }
 
 .why_intellitrader {
@@ -93,13 +107,27 @@ li {
   float: right;
   display: flex;
   flex-direction: column;
+  background: #50827e;
+  padding-bottom: 150px;
 }
 
 .why_item {
-  height: 8vh;
-  width: 8vh;
+  height: 10%;
+  width: 10%;
   padding-left: 20px;
   margin-top: -20px;
+}
+
+@media (max-width: 700px) {
+  #LoginBox,
+  .why_intellitrader {
+    width: 100%;
+    float: none;
+    padding-bottom: 50px;
+  }
+  body {
+    background: #3c3b3b;
+  }
 }
 
 .why_intellitrader_item {
@@ -114,9 +142,20 @@ li {
 }
 
 .checkmark {
-  height: 5vh;
-  width: 5vh;
+  height: 5%;
+  width: 5%;
   padding-right: 20px;
+}
+
+@media (max-width: 1000px) {
+  .checkmark {
+    width: 10%;
+    height: 10%;
+  }
+  .why_item {
+    width: 16%;
+    height: 16%;
+  }
 }
 
 .info_title {

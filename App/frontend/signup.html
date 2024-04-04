@@ -19,6 +19,12 @@
           <div id="loginImage">
             <img src="./images/IntelliTraderDark.png" />
           </div>
+          <div v-if="validationErrors" class="error_messages">
+            Please correct the following error(s):
+            <ul>
+              <li v-for="error in errorMessages">{{error}}</li>
+            </ul>
+          </div>
           <!-- vmodel only for input when data is being sent back to code-->
           <div id="new-user-inputs">
             <div id="login_title">Register</div>

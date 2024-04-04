@@ -1,52 +1,32 @@
 Vue.createApp({
+  // data, methods, and created are elements of the Vue app.
+  // data is a function that returns an object that represents all data in app
   data: function () {
     return {
-      users: [
-        {
-          id: 1,
-          name: "Anjolie",
-          birthday: "2001-10-19",
-          email: "anjoliekatecummins@gmail.com",
-          password: "1234",
-          investments: [
-            {
-              stock_symbol: "AAPL",
-              quantity: 1,
-              price: 5,
-              transaction_type: "sell",
-              timestamp: "2021-10-19T12:00:00",
-            },
-          ],
-          preferences: {
-            symbols: ["AAPL", "GOOGL", "AMZN"],
-            investment_amount: 10,
-          },
-        },
-      ],
-      preferences: [],
-      investments: [],
       errorMessages: {},
       newUserName: "",
+      newUserBirthday: "",
       newUserEmail: "",
       newUserPassword: "",
-      newPreference: "",
-      newInvestment: "",
       returningUserEmail: "",
       returningUserPassword: "",
       userInfo: {},
       userInfoName: "",
+      userInfoBirthday: "",
       userInfoEmail: "",
     };
   },
 
+  // object with more keys inside it.
   methods: {
     loadUserInfo: function () {
-      const userId = localStorage.getItem("userId");
-      fetch(`/users/${userId}`, userId)
+      fetch("session", { credentials: "include" })
         .then((response) => response.json())
         .then((userData) => {
           console.log("User Info:", userData);
           this.userInfo = userData;
+          this.loadUserTransactions();
+          this.loadUserInterests();
         })
         .catch((error) => {
           console.error("Error fetching user info:", error);
@@ -75,9 +55,18 @@ Vue.createApp({
       if (this.newUserName == undefined || this.newUserName == "") {
         this.errorMessages["user.name"] = "Name is required.";
       }
+
+      let birthDate = new Date(this.newUserBirthday);
+      if (birthDate == "Invalid Date") {
+        this.errorMessages["user.birthday"] = "Birthday is invalid.";
+      } else {
+        this.newUserBirthday = birthDate.toISOString().split("T")[0];
+      }
+
       if (!this.isEmailValid(this.newUserEmail)) {
         this.errorMessages["user.email"] = "Email is invalid.";
       }
+
       if (
         this.newUserPassword == undefined ||
         this.newUserPassword.length < 8
@@ -85,28 +74,34 @@ Vue.createApp({
         this.errorMessages["user.password"] =
           "Password must be at least 8 characters.";
       }
+
       console.log(Object.keys(this.errorMessages).length);
+
       return Object.keys(this.errorMessages).length == 0;
     },
 
     addUser: function () {
       if (!this.isNewUserValid()) return;
-      var data = "name=" + encodeURIComponent(this.newUserName);
-      data += "&email=" + encodeURIComponent(this.newUserEmail);
-      data += "&password=" + encodeURIComponent(this.newUserPassword);
-      console.log("data: ", data);
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "POST",
         },
-        body: data,
+        credentials: "include",
+        body: JSON.stringify({
+          name: this.newUserName,
+          birthday: this.newUserBirthday,
+          email: this.newUserEmail,
+          password: this.newUserPassword,
+        }),
       };
-      fetch("/users/signup", requestOptions).then((response) => {
+      fetch("http://localhost:5000/users", requestOptions).then((response) => {
         if (response.status == 201) {
-          this.loadUsersCollection();
           console.log("user added.");
+          //hide the sign up screen
           this.newUserName = "";
+          this.newUserBirthday = "";
           this.newUserEmail = "";
           this.newUserPassword = "";
           this.displayLogin();
@@ -114,44 +109,46 @@ Vue.createApp({
       });
     },
 
-    loginUser: function () {
+    logoutUser: function () {
       if (!this.validateReturningUserInputs()) return;
-      var data = "email=" + encodeURIComponent(this.returningUserEmail);
-      data += "&password=" + encodeURIComponent(this.returningUserPassword);
-      console.log("data: ", data);
-      requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: data,
-      };
-      fetch("/users/login", requestOptions)
+      fetch("http://localhost:5000/session", {
+        method: "DELETE",
+        credentials: "include",
+      })
         .then((response) => {
-          if (response.status === 201) {
-            response.json().then((data) => {
-              console.log("User ID:", data.userId);
-              localStorage.setItem("userId", data.userId);
-              this.loadUserInfo();
-              fetch(`/users/${data.userId}/investments`)
-                .then((response) => response.json())
-                .then((investments) => {
-                  this.investments = investments;
-                });
-              fetch(`/users/${data.userId}/preferences`)
-                .then((response) => response.json())
-                .then((preferences) => {
-                  this.preferences = preferences;
-                });
-            });
-            this.displayHomePage();
+          if (response.status === 200) {
+            this.signOut();
           } else {
-            this.errorMessages.login = "Invalid email or password";
+            console.error("Failed to logout:", response.statusText);
           }
         })
         .catch((error) => {
-          console.error("Error:", error);
+          console.error("Error logging out:", error);
         });
+    },
+
+    loginUser: function () {
+      // if (!this.validateReturningUserInputs()) return;
+      requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: this.returningUserEmail,
+          password: this.returningUserPassword,
+        }),
+      };
+      fetch("http://localhost:5000/session", requestOptions).then(
+        (response) => {
+          if (response.status == 201) {
+            this.displayHomePage();
+          } else {
+            this.errorMessages.login = "Invalid email or password.";
+          }
+        }
+      );
     },
 
     isEmailValid: function (email) {
@@ -162,217 +159,12 @@ Vue.createApp({
         );
     },
 
-    loadUsersCollection: function () {
-      fetch("/users").then((response) => {
-        if (response.status == 200) {
-          response.json().then((users) => {
-            console.log("recieved users from API: ", users);
-            this.users = users;
-          });
-        }
-      });
+    loadUserSymbols: function () {
+      this.symbols = this.userInfo.symbols;
     },
 
-    loadUserInvestments: function (userId) {
-      fetch(`/users/${userId}/investments`)
-        .then((response) => response.json())
-        .then((investments) => {
-          console.log("User investments:", investments);
-        })
-        .catch((error) => {
-          console.error("Error fetching investments:", error);
-        });
-    },
-
-    loadUserPreferences: function (userId) {
-      fetch(`/users/${userId}/preferences`)
-        .then((response) => response.json())
-        .then((preferences) => {
-          console.log("User preferences:", preferences);
-        })
-        .catch((error) => {
-          console.error("Error fetching preferences:", error);
-        });
-    },
-
-    displayInput: function () {
-      const userId = localStorage.getItem("userId");
-      var newUserHomePage = document.getElementById("user-info");
-      newUserHomePage.style = "display:none";
-      var returningUserHomePage = document.getElementById("edit-info");
-      returningUserHomePage.style = "display:grid";
-      fetch(`/users/${userId}`)
-        .then((response) => response.json())
-        .then((userData) => {
-          console.log("User Info:", userData);
-          this.userInfo = userData;
-          this.userInfoName = this.userInfo.name;
-          this.userInfoEmail = this.userInfo.email;
-
-          document.getElementById("nameInput").value = this.userInfoName;
-          document.getElementById("emailInput").value = this.userInfoEmail;
-        });
-    },
-
-    updateUserInformation: function () {
-      const userId = localStorage.getItem("userId");
-      const userData = {
-        name: this.userInfoName,
-        email: this.userInfoEmail,
-      };
-      console.log("userData: ", userData);
-      fetch(`/users/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      })
-        .then((response) => {
-          if (response.ok) {
-            console.log("User information updated successfully");
-            this.userInfo.name = userData.name;
-            this.userInfo.email = userData.email;
-
-            this.userInfoName = "";
-            this.userInfoEmail = "";
-
-            var newUserHomePage = document.getElementById("edit-info");
-            newUserHomePage.style = "display:none";
-            var returningUserHomePage = document.getElementById("user-info");
-            returningUserHomePage.style = "display:grid";
-          } else {
-            console.error(
-              "Failed to update user information:",
-              response.statusText
-            );
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating user information:", error);
-        });
-    },
-
-    addInvestment: function () {
-      const userId = localStorage.getItem("userId");
-      const data = "investment=" + encodeURIComponent(this.newInvestment);
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: data,
-      };
-      fetch(`/users/${userId}/investments`, requestOptions)
-        .then((response) => {
-          if (response.status === 201) {
-            console.log("Investment added successfully");
-            this.loadUserInvestments(userId);
-            fetch(`/users/${userId}/investments`)
-              .then((response) => response.json())
-              .then((investments) => {
-                this.investments = investments;
-                this.newInvestment = "";
-              });
-          } else {
-            console.error("Failed to add investment:", response.statusText);
-          }
-        })
-        .catch((error) => {
-          console.error("Error adding investment:", error);
-        });
-    },
-
-    removeInvestment: function (investment) {
-      if (confirm("Are you sure you want to remove this investment?")) {
-        const userId = localStorage.getItem("userId");
-        const requestOptions = {
-          method: "DELETE",
-        };
-        fetch(`/users/${userId}/investments/${investment}`, requestOptions)
-          .then((response) => {
-            if (response.status === 204) {
-              console.log("investment removed successfully");
-              this.loadUserInvestments(userId);
-              fetch(`/users/${userId}/investments`)
-                .then((response) => response.json())
-                .then((investments) => {
-                  this.investments = investments;
-                });
-            } else {
-              console.error(
-                "Failed to remove investment:",
-                response.statusText
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error removing investment:", error);
-          });
-      }
-    },
-
-    addPreference: function () {
-      const userId = localStorage.getItem("userId");
-      const data = "preference=" + encodeURIComponent(this.newPreference);
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: data,
-      };
-      fetch(`/users/${userId}/preferences`, requestOptions)
-        .then((response) => {
-          if (response.status === 201) {
-            console.log("preference added successfully");
-            this.loadUserPreferences(userId);
-            fetch(`/users/${userId}/preferences`)
-              .then((response) => response.json())
-              .then((preferences) => {
-                this.preferences = preferences;
-                this.newpreference = "";
-              });
-          } else {
-            console.error("Failed to add preference:", response.statusText);
-          }
-        })
-        .catch((error) => {
-          console.error("Error adding preference:", error);
-        });
-    },
-
-    removePreference: function (preference) {
-      if (confirm("Are you sure you want to remove this preference?")) {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-          console.error("User ID not found in local storage");
-          return;
-        }
-        const requestOptions = {
-          method: "DELETE",
-        };
-        fetch(`/users/${userId}/preferences/${preference}`, requestOptions)
-          .then((response) => {
-            if (response.status === 204) {
-              console.log("preference removed successfully");
-              this.loadUserPreferences(userId);
-              fetch(`/users/${userId}/preferences`)
-                .then((response) => response.json())
-                .then((preferences) => {
-                  this.preferences = preferences;
-                });
-            } else {
-              console.error(
-                "Failed to remove preference:",
-                response.statusText
-              );
-            }
-          })
-          .catch((error) => {
-            console.error("Error removing preference:", error);
-          });
-      }
+    loadUserTransactions: function () {
+      this.transactions = this.userInfo.transactions;
     },
 
     errorMessageForField: function (fieldName) {
@@ -388,49 +180,22 @@ Vue.createApp({
     },
 
     displayHomePage: function () {
-      var returningUserHomePage = document.getElementById("LoginBox");
-      returningUserHomePage.style = "display:none";
-      var homePage = document.getElementById("homePage");
-      homePage.style = "display:grid";
+      this.loadUserInfo();
+      this.loadUserTransactions();
+      this.loadUserSymbols();
+      window.location.href = "dashboard.html";
     },
 
     displayLogin: function () {
-      errorMessages = {};
-      var newUserHomePage = document.getElementById("new-user-inputs");
-      newUserHomePage.style = "display:none";
-      var returningUserHomePage = document.getElementById(
-        "returning-user-inputs"
-      );
-      returningUserHomePage.style = "display:grid";
-      this.returningUserEmail = "";
-      this.returningUserPassword = "";
+      window.location.href = "login.html";
     },
 
     signOut: function () {
-      var homePage = document.getElementById("homePage");
-      homePage.style = "display:none";
-      var newUserHomePage = document.getElementById("new-user-inputs");
-      newUserHomePage.style = "display: grid";
-      var returningUserHomePage = document.getElementById(
-        "returning-user-inputs"
-      );
-      returningUserHomePage.style = "display:none";
-      var returningUserHomePage = document.getElementById("LoginBox");
-      returningUserHomePage.style = "display:inline-flex";
+      this.userInfo = {};
+      this.symbols = [];
+      this.transactions = [];
 
-      this.newUserPassword = "";
-      this.newUserEmail = "";
-      this.newUserName = "";
-    },
-
-    loadingPage: function () {
-      document.addEventListener("readystatechange", (event) => {
-        if (event.target.readyState === "loading") {
-          document.getElementById("socket").style.display = "block";
-        } else if (event.target.readyState === "complete") {
-          document.getElementById("socket").style.display = "none";
-        }
-      });
+      window.location.href = "signup.html";
     },
   },
 
@@ -441,7 +206,25 @@ Vue.createApp({
   },
 
   created: function () {
+    fetch("http://localhost:5000/session", {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.user) {
+          this.userInfo = data.user;
+          this.displayHomePage();
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  },
+
+  // IDs and classes only meant for css purposes shouldn't have to query them for js or for automated behaviour tests
+  // created is a function that gets called once when it loads
+  // this is like self in python. this.data_attribute or this.method_name
+  // v-on establishes an event listener its a directive, data binding, rendering
+  created: function () {
     console.log("Hello, vue.");
-    this.loadUserInfo();
   },
 }).mount("#app");

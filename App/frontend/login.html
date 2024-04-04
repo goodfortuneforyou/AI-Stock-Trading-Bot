@@ -20,13 +20,23 @@
           <div id="loginImage">
             <img src="./images/IntelliTraderDark.png" />
           </div>
+          <div v-if="validationErrors" class="error_messages">
+            Please correct the following error(s):
+            <ul>
+              <li v-for="error in errorMessages">{{error}}</li>
+            </ul>
+          </div>
           <!-- vmodel only for input when data is being sent back to code-->
           <div id="new-user-inputs">
             <div id="login_title">Login</div>
             <label> Email </label>
             <br />
             <br />
-            <input type="email" placeholder="Email" v-model="newUserEmail" />
+            <input
+              type="email"
+              placeholder="Email"
+              v-model="returningUserEmail"
+            />
             <br />
             <br />
             <label> Password </label>
@@ -35,12 +45,12 @@
             <input
               type="password"
               placeholder="Password"
-              v-model="newUserPassword"
+              v-model="returningUserPassword"
             />
           </div>
           <br />
           <br />
-          <button v-on:click="addUser">Login</button>
+          <button v-on:click="loginUser">Login</button>
           <br />
           <br />
           <br />
