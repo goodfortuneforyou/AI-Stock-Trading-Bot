@@ -14,6 +14,13 @@ Vue.createApp({
       userInfoName: "",
       userInfoBirthday: "",
       userInfoEmail: "",
+      chartData: [],
+      current_return: "",
+      current_port_value: "",
+      transactions: [],
+      symbols: ["AAPL", "GOOGL", "AMZN", "TSLA", "MSFT", "NFLX", "FB", "NVDA"],
+      backgroundColor: "rgba(97, 102, 97, 0.45)",
+      selectedSymbol: null,
     };
   },
 
@@ -197,6 +204,120 @@ Vue.createApp({
 
       window.location.href = "signup.html";
     },
+    parseCSV: function (data) {
+      return d3.csvParse(data, function (d) {
+        return {
+          datetime: new Date(d.datetime).toLocaleString("en-US", {
+            month: "short",
+            year: "numeric",
+          }),
+          portfolio_value: +d.portfolio_value,
+          todays_return: d.return,
+        };
+      });
+    },
+
+    createChart: function (data) {
+      var labels = data.map(function (d) {
+        return d.datetime;
+      });
+
+      var values = data.map(function (d) {
+        return d.portfolio_value;
+      });
+
+      var ctx = document.getElementById("myChart").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Portfolio Value",
+              data: values,
+              borderColor: "rgba(119, 255, 228, 0.7)",
+              backgroundColor: "rgba(0, 0, 255, 0.1)",
+              borderWidth: 1,
+              options: {
+                responsive: true,
+                maintainAspectRatio: true,
+              },
+            },
+          ],
+        },
+      });
+    },
+    changeBackgroundColor: function (symbol) {
+      this.backgroundColor = "rgba(119, 255, 228, 0.4)";
+      this.selectedSymbol = symbol;
+    },
+
+    loadChartData: function () {
+      var self = this;
+      d3.text("BotStrategy_2024-04-14_19-11-08_stats.csv")
+        .then(function (data) {
+          var parsedData = self.parseCSV(data);
+          self.chartData = parsedData;
+          self.createChart(parsedData);
+
+          if (parsedData.length > 0) {
+            self.current_return = parseFloat(
+              parsedData[parsedData.length - 1].todays_return
+            ).toFixed(2);
+            self.current_port_value = parseFloat(
+              parsedData[parsedData.length - 1].portfolio_value
+            ).toFixed(2);
+          }
+        })
+        .catch(function (error) {
+          console.error("Error loading CSV file:", error);
+        });
+    },
+
+    async loadTransactions() {
+      const response = await fetch(
+        "BotStrategy_2024-04-14_19-14-56_trades.csv"
+      );
+      const data = await response.text();
+
+      const rows = data.split("\n").slice(1);
+      for (const row of rows) {
+        const columns = row.split(",");
+        const transaction = {
+          date: columns[0],
+          strategy: columns[1],
+          symbol: columns[2],
+          side: columns[3],
+          type: columns[4],
+          status: columns[5],
+          multiplier: columns[6],
+          time_in_force: columns[7],
+          asset_strike: columns[8],
+          asset_multiplier: columns[9],
+          asset_type: columns[10],
+          price: columns[11],
+          filled_quantity: columns[12],
+          trade_cost: columns[13],
+        };
+        if (transaction.price === "" || transaction.price === "0") {
+          continue;
+        }
+        if (transaction.side === "buy") {
+          transaction.action = "Bought";
+        } else if (transaction.side === "sell") {
+          transaction.action = "Sold";
+        }
+        transaction.price = parseFloat(transaction.price).toFixed(2);
+        transaction.date = new Date(transaction.date).toLocaleString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        });
+        this.transactions.push(transaction);
+      }
+    },
   },
 
   computed: {
@@ -205,6 +326,11 @@ Vue.createApp({
     },
   },
 
+  mounted: function () {
+    console.log("Vue app mounted.");
+    this.loadChartData();
+    this.loadTransactions();
+  },
   created: function () {
     fetch("http://localhost:5000/session", {
       method: "GET",

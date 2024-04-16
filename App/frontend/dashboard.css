@@ -20,7 +20,7 @@ html {
   width: 40vw;
   border-radius: 10px;
   flex-direction: column;
-  background-color: #353535;
+  background-color: rgb(53, 53, 53);
   padding: 20px;
   margin-top: 10px;
 }
@@ -129,18 +129,23 @@ html {
 }
 
 .stock_status_box {
+  height: 10vh;
+  width: 12vw;
+  border-radius: 10px;
+  background-color: rgba(97, 102, 97, 0.45);
+  margin: 15px;
+  display: grid;
+  justify-content: center;
+}
+
+.values {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 10vh;
-  width: 12vw;
-  overflow: auto;
-  border-radius: 10px;
-  background-color: rgba(97, 102, 97, 0.45);
 }
 
 .stock_status_box:hover {
-  background-color: rgba(119, 255, 228, 0.7);
+  background-color: rgba(119, 255, 228, 0.4);
   transition: background-color 1s ease;
 }
 
@@ -158,18 +163,17 @@ html {
   font-style: italic;
   font-size: medium;
   color: #ffffff;
-  margin-left: 10px;
   display: inline-block;
+  display: grid;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .stock_amount {
   font-family: "Roboto", sans-serif;
   font-style: italic;
-  font-size: small;
+  font-size: medium;
   color: #ffffff;
-  display: inline-block;
-  margin-top: 15px;
-  margin-left: -60px;
 }
 
 .stock_above {
@@ -177,23 +181,14 @@ html {
   font-family: "Roboto", sans-serif;
   font-style: italic;
   font-size: small;
-  margin-left: -60px;
-  padding-top: 10px;
-}
-
-.stock_below {
-  color: #ff0000;
-  font-family: "Roboto", sans-serif;
-  font-style: italic;
-  font-size: small;
-  margin-left: -60px;
+  padding-left: 20px;
 }
 
 .reports_box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 36vh;
+  height: 30vh;
   width: 100vw;
   overflow: auto;
   border-radius: 10px;
@@ -277,7 +272,6 @@ html {
 
 .transactions_box ul li {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin-left: -20px;
 }
 
 .transactions_box {
@@ -287,9 +281,31 @@ html {
 }
 .transaction_box {
   padding: 30px;
-  height: 6vh;
-  width: 15vw;
+  height: 5vh;
+  width: 20vw;
   overflow: auto;
   border-radius: 10px;
   background-color: rgba(97, 102, 97, 0.45);
+  margin-bottom: 30px;
+}
+
+/* #myChart {
+  margin-left: auto;
+  margin-right: auto;
+} */
+.chart_box {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  height: 36vh;
+  width: 100vw;
+  overflow: auto;
+  padding-bottom: 20px;
+}
+
+.symbols_container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  overflow: auto;
 }

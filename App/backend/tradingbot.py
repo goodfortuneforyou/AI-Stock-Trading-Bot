@@ -8,13 +8,16 @@ from lumibot.backtesting import YahooDataBacktesting
 from datetime import datetime
 from timedelta import Timedelta
 from alpaca_trade_api import REST
-from App.backend.finbert_model import estimate_sentiment
+from finbert_model import estimate_sentiment
 import os
+from dotenv import load_dotenv
+import pandas as pd
 
 # Load in environment variables
 from dotenv import load_dotenv
-load_dotenv("info.env")
 
+
+load_dotenv()
 # Get environment variables
 API_KEY = os.getenv('API_KEY')
 API_SECRET = os.getenv('API_SECRET')
@@ -73,9 +76,15 @@ class BotStrategy(Strategy):
 if __name__ == "__main__":
     start_date = datetime(2022, 1, 1)
     end_date = datetime(2024, 1, 31)
-    BotStrategy.backtest(
+
+    backtest = BotStrategy.backtest(
         YahooDataBacktesting,
         start_date,
         end_date,
-        benchmark_asset="AMZN",
+        benchmark_asset="AMZN"
+        # plot_file_html="backtest.html", 
+        # plot_file_png="backtest.png"
+        # indicators_file="indicators.html"
     )
+    df = pd.DataFrame(backtest)
+    df.to_csv("backtest.csv")
