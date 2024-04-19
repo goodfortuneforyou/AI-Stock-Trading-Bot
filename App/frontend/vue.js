@@ -20,20 +20,32 @@ Vue.createApp({
       transactions: [],
       symbols: ["AAPL", "GOOGL", "AMZN", "TSLA", "MSFT", "NFLX", "FB", "NVDA"],
       backgroundColor: "rgba(97, 102, 97, 0.45)",
-      selectedSymbol: null,
+      selectedSymbol: "",
+      amount: 0,
+      stockPercent: 0,
+      userSymbols: [],
     };
   },
 
   // object with more keys inside it.
   methods: {
     loadUserInfo: function () {
-      fetch("session", { credentials: "include" })
+      fetch("http://localhost:5000/session", {
+        method: "GET",
+        credentials: "include",
+      })
         .then((response) => response.json())
         .then((userData) => {
           console.log("User Info:", userData);
-          this.userInfo = userData;
-          this.loadUserTransactions();
-          this.loadUserInterests();
+          this.userInfo = userData.user;
+          this.loadTransactions();
+
+          for (let symbol of Object.keys(this.userInfo.symbols)) {
+            if (symbol == "symbol") {
+              this.userSymbols.push(this.userInfo.symbols[symbol]);
+            }
+          }
+          console.log("User Symbols:", this.userSymbols);
         })
         .catch((error) => {
           console.error("Error fetching user info:", error);
@@ -101,6 +113,7 @@ Vue.createApp({
           birthday: this.newUserBirthday,
           email: this.newUserEmail,
           password: this.newUserPassword,
+          symbols: {},
         }),
       };
       fetch("http://localhost:5000/users", requestOptions).then((response) => {
@@ -136,7 +149,7 @@ Vue.createApp({
 
     loginUser: function () {
       // if (!this.validateReturningUserInputs()) return;
-      requestOptions = {
+      const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -150,7 +163,14 @@ Vue.createApp({
       fetch("http://localhost:5000/session", requestOptions).then(
         (response) => {
           if (response.status == 201) {
-            this.displayHomePage();
+            return response.json().then((userData) => {
+              this.userInfo = userData.user;
+              if (userData.message == "First login") {
+                this.displayNewUserForm();
+              } else if (userData.message == "Authenticated") {
+                this.displayHomePage();
+              }
+            });
           } else {
             this.errorMessages.login = "Invalid email or password.";
           }
@@ -166,16 +186,38 @@ Vue.createApp({
         );
     },
 
-    loadUserSymbols: function () {
-      this.symbols = this.userInfo.symbols;
-    },
-
-    loadUserTransactions: function () {
-      this.transactions = this.userInfo.transactions;
-    },
-
     errorMessageForField: function (fieldName) {
       return this.errorMessages[fieldName];
+    },
+
+    addSymbol: function () {
+      console.log("Adding symbol:", this.selectedSymbol);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "POST",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          symbols: { symbol: this.selectedSymbol, amount: this.amount },
+        }),
+      };
+      fetch(`http://localhost:5000/symbols`, requestOptions)
+        .then((response) => {
+          if (response.status === 201) {
+            console.log("Symbol added successfully");
+            this.loadUserInfo();
+            this.selectedSymbol = "";
+            this.amount = 0;
+            this.displayHomePage();
+          } else {
+            console.error("Failed to add symbol:", response.statusText);
+          }
+        })
+        .catch((error) => {
+          console.error("Error adding symbol:", error);
+        });
     },
 
     errorStyleForField: function (fieldName) {
@@ -188,22 +230,61 @@ Vue.createApp({
 
     displayHomePage: function () {
       this.loadUserInfo();
-      this.loadUserTransactions();
-      this.loadUserSymbols();
-      window.location.href = "dashboard.html";
+      var home = document.getElementById("dashboard_html");
+      var signup = document.getElementById("signup_html");
+      var login = document.getElementById("login_html");
+      var new_user = document.getElementById("new_user_html");
+      home.style = "display:block";
+      login.style = "display:none";
+      signup.style = "display:none";
+      new_user.style = "display:none";
+      document.body.style.background = "black";
     },
 
     displayLogin: function () {
-      window.location.href = "login.html";
+      var login = document.getElementById("login_html");
+      var signup = document.getElementById("signup_html");
+      login.style = "display:block";
+      signup.style = "display:none";
+    },
+
+    displayNewUserForm: function () {
+      var form = document.getElementById("new_user_html");
+      var login = document.getElementById("login_html");
+      form.style = "display:block";
+      login.style = "display:none";
     },
 
     signOut: function () {
       this.userInfo = {};
-      this.symbols = [];
       this.transactions = [];
-
-      window.location.href = "signup.html";
+      this.userSymbols = [];
+      var home = document.getElementById("dashboard_html");
+      var signup = document.getElementById("signup_html");
+      home.style = "display:none";
+      signup.style = "display:block";
+      document.body.style.background =
+        "linear-gradient(90deg, #3c3b3b 50%, #50827e 50%)";
+      fetch("http://localhost:5000/session", {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "DELETE",
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("User signed out.");
+          } else {
+            console.error("Failed to sign out:", response.statusText);
+          }
+        })
+        .catch((error) => {
+          console.error("Error signing out:", error);
+        });
     },
+
     parseCSV: function (data) {
       return d3.csvParse(data, function (d) {
         return {
@@ -247,6 +328,7 @@ Vue.createApp({
         },
       });
     },
+
     changeBackgroundColor: function (symbol) {
       this.backgroundColor = "rgba(119, 255, 228, 0.4)";
       this.selectedSymbol = symbol;
@@ -254,7 +336,8 @@ Vue.createApp({
 
     loadChartData: function () {
       var self = this;
-      d3.text("BotStrategy_2024-04-14_19-11-08_stats.csv")
+      fetch("http://localhost:5000/get-csv-stats")
+        .then((response) => response.text())
         .then(function (data) {
           var parsedData = self.parseCSV(data);
           self.chartData = parsedData;
@@ -275,10 +358,9 @@ Vue.createApp({
     },
 
     async loadTransactions() {
-      const response = await fetch(
-        "BotStrategy_2024-04-14_19-14-56_trades.csv"
-      );
+      const response = await fetch("http://localhost:5000/get-csv-trades");
       const data = await response.text();
+      console.log(data);
 
       const rows = data.split("\n").slice(1);
       for (const row of rows) {
@@ -307,6 +389,9 @@ Vue.createApp({
         } else if (transaction.side === "sell") {
           transaction.action = "Sold";
         }
+        transaction.quantity = parseFloat(transaction.filled_quantity).toFixed(
+          0
+        );
         transaction.price = parseFloat(transaction.price).toFixed(2);
         transaction.date = new Date(transaction.date).toLocaleString("en-US", {
           month: "short",
@@ -327,30 +412,26 @@ Vue.createApp({
   },
 
   mounted: function () {
-    console.log("Vue app mounted.");
-    this.loadChartData();
-    this.loadTransactions();
-  },
-  created: function () {
     fetch("http://localhost:5000/session", {
       method: "GET",
       credentials: "include",
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data.user) {
-          this.userInfo = data.user;
+      .then((userData) => {
+        if (userData.user) {
+          this.userInfo = userData.user;
+          this.loadChartData();
+          this.loadTransactions();
           this.displayHomePage();
         }
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {
+        console.error("Error fetching user info:", error);
+      });
   },
 
   // IDs and classes only meant for css purposes shouldn't have to query them for js or for automated behaviour tests
   // created is a function that gets called once when it loads
   // this is like self in python. this.data_attribute or this.method_name
   // v-on establishes an event listener its a directive, data binding, rendering
-  created: function () {
-    console.log("Hello, vue.");
-  },
 }).mount("#app");

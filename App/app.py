@@ -1,6 +1,7 @@
 import sys
 sys.path.append('./backend')
 import json
+from flask import send_file
 from flask import Flask, jsonify, session, request
 from flask_cors import CORS
 from flask_pymongo import PyMongo
@@ -11,6 +12,7 @@ import bcrypt
 import os
 from subprocess import Popen, PIPE
 from flask_session import Session
+import logging
 # from apscheduler.schedulers.background import BackgroundScheduler
 # from backend.tradingbot import BotStrategy
 # from datetime import datetime, timedelta
@@ -32,10 +34,12 @@ AMOUNT = 0
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config["MONGO_URI"] = MONGO_URI
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') 
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 
 mongo = PyMongo(app)
 Session(app)
@@ -44,37 +48,40 @@ Session(app)
 
 users = mongo.db.users
 
+from flask import abort
+
 @app.route('/session', methods=['POST'])
 def login_user():
     try:
         data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
+        if not data or 'email' not in data or 'password' not in data:
+            abort(400, "Missing email or password in request")
+
+        email = data['email']
+        password = data['password']
+        
         user = mongo.db.users.find_one({'email': email})
-        if user:
-            if bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-                # set the session user_id to the user's id and return the user
-                session['user_id'] = str(user['_id'])
-                user['_id'] = str(user['_id'])
-                return jsonify({'message': 'authenticated', 'user': user}), 201
-            else:
-                return jsonify({'error': 'Invalid password'}), 401
-        else:
-            return jsonify({'error': 'User not found'}), 404
+        if not user:
+            abort(404, "User not found")
+
+        if not bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+            abort(401, "Invalid password")
+
+        session['user_id'] = str(user['_id'])
+        user['_id'] = str(user['_id'])
+        #if first login send first login message and update first login to false
+        if user['first_login']:
+            user['first_login'] = False
+            query = {'_id': ObjectId(user['_id'])}
+            new_values = {'$set': {'first_login': False}}
+            mongo.db.users.update_one(query, new_values)
+            print(session)
+            return jsonify({'message': 'First login', 'user': user}), 201
+        #not first login send authenticated message
+        return jsonify({'message': 'Authenticated', 'user': user}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/session', methods=['GET'])
-def get_session():
-    try:
-        if 'user_id' in session:
-            user = users.find_one({'_id': ObjectId(session['user_id'])})
-            user['_id'] = str(user['_id'])
-            return jsonify(user), 200
-        else:
-            return jsonify({'error': 'user session does not exist'}), 401
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/session', methods=['DELETE'])
 def logout_user():
@@ -87,12 +94,18 @@ def logout_user():
 
 @app.route('/session', methods=['GET'])
 def check_user():
-    if 'user_id' in session:
-        user = mongo.db.users.find_one({'_id': ObjectId(session['user_id'])})
-        if user:
-            user['_id'] = str(user['_id'])
-            return jsonify({'user': user}), 200
-    return jsonify({'error': 'No user logged in'}), 401
+    print(session)
+    try:
+        if 'user_id' in session:
+            user_id = session['user_id']
+            user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+            if user:
+                user['_id'] = str(user['_id'])
+                return jsonify({'user': user}), 200
+        return jsonify({'error': 'No user logged in'}), 401
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 @app.route('/users', methods=['POST'])
@@ -114,12 +127,57 @@ def create_user():
             'email': email,
             'birthday': birthday,
             'password': bcrypt_password,
+            'symbols': {},
+            'first_login': True,    
         }
         inserted_user = mongo.db.users.insert_one(new_user)
         user_id = inserted_user.inserted_id
         new_user['_id'] = str(user_id) 
         return jsonify(new_user), 201
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/symbols', methods=['POST'])
+def add_symbol():
+    try:
+        data = request.get_json()
+        print('Received data:', data)  
+        symbols = data.get('symbols')
+        cc = data.get('cc')
+        user_id = session['user_id']
+        print('User ID:', user_id)  
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        print('User:', user)  
+        if user:
+            if 'symbols' not in user:
+                user['symbols'] = {}
+            for symbol, amount in symbols.items():
+                user['symbols'][symbol] = amount
+            query = {'_id': ObjectId(user_id)}
+            new_values = {'$set': {'symbols': user['symbols'], 'cc': cc}}
+            mongo.db.users.update_one(query, new_values)
+            return jsonify({'message': 'Symbol added successfully'}), 201
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        print('Exception:', e)  
+        return jsonify({'error': str(e)}), 500
+    
+
+@app.route('/get-csv-stats', methods=['GET'])
+def get_csv_stats():
+    try:
+        return send_file('BotStrategy_2024-04-14_19-11-08_stats.csv')
+    except Exception as e:
+        print(f"Error while trying to send file: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/get-csv-trades', methods=['GET'])
+def get_csv_trades():
+    try:
+        return send_file('BotStrategy_2024-04-14_19-14-56_trades.csv')
+    except Exception as e:
+        print(f"Error while trying to send file: {e}")
         return jsonify({'error': str(e)}), 500
     
 # @app.route('/get_news', methods=['GET'])

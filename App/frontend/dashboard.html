@@ -8,132 +8,394 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
-    <title>Line Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
+    <title>IntelliTrader</title>
   </head>
   <body>
     <div id="app">
-      <div class="row">
-        <div class="rounded_column_container">
-          <div class="menu">
-            <img src="./images/IntelliTrader.png" class="logo" />
-            <img src="./images/anjolie.jpg" class="profile_pic" />
-            <div class="dashboard_ul_li">
-              <div class="dashboard_items_excluding_logout">
-                <ul>
-                  <li class="home_clicked_item">
-                    <a href="dashboard.html">
-                      <img src="./images/dashboard.png" />Dashboard</a
-                    >
-                  </li>
-                  <li>
-                    <a href="preferences.html">
-                      <img src="./images/preferences.png" />
-                      Preferences</a
-                    >
-                  </li>
-                  <li>
-                    <a href="transactions.html"
-                      ><img src="./images/transactions.png" />Transactions</a
-                    >
-                  </li>
-                  <li>
-                    <a href="reports.html"
-                      ><img src="./images/reports.png" />Reports</a
-                    >
-                  </li>
-                </ul>
+      <div id="signup_html">
+        <div class="login">
+          <div class="LoginBox">
+            <div class="loginImage">
+              <img src="./images/IntelliTraderDark.png" />
+            </div>
+            <div v-if="validationErrors" class="error_messages">
+              Please correct the following error(s):
+              <ul>
+                <li v-for="error in errorMessages">{{error}}</li>
+              </ul>
+            </div>
+            <!-- vmodel only for input when data is being sent back to code-->
+            <div class="new-user-inputs">
+              <div class="login_title">Register</div>
+
+              <label> Name </label>
+              <br />
+              <br />
+              <input type="text" placeholder="Username" v-model="newUserName" />
+              <br />
+              <br />
+              <label> Birthday </label>
+              <br />
+              <br />
+              <input type="date" v-model="newUserBirthday" />
+              <br />
+              <br />
+              <label> Email </label>
+              <br />
+              <br />
+              <input type="email" placeholder="Email" v-model="newUserEmail" />
+              <br />
+              <br />
+              <label> Password </label>
+              <br />
+              <br />
+              <input
+                type="password"
+                placeholder="Password"
+                v-model="newUserPassword"
+              />
+            </div>
+            <br />
+            <br />
+            <div class="LoginBox">
+              <button v-on:click="addUser">Sign Up</button>
+
+              <br />
+              <br />
+              <br />
+              <div class="question">
+                Already have an account?
+                <a v-on:click="displayLogin" class="sign_in_link">sign in</a>
               </div>
             </div>
           </div>
-          <li>
-            <a href="signup.html" class="logout">Logout</a>
-          </li>
         </div>
-        <div class="not_rounded_column_container">
-          <div class="dashboard">
-            <h1 class="dashboard_text">Dashboard</h1>
-            <div class="row">
-              <div class="symbols_container">
-                <template v-for="symbol in symbols">
-                  <a @click="changeBackgroundColor(symbol)">
-                    <div
-                      class="stock_status_box"
-                      :style="{'background-color': symbol === selectedSymbol ? backgroundColor : ''}"
-                    >
-                      <div class="stock_status_text_symbol">{{ symbol }}</div>
-                      <div class="values">
-                        <h3 class="stock_amount">${{ current_port_value }}</h3>
-                        <span>
-                          <div
-                            class="stock_above {{ current_return > 0 ? 'green' : 'red' }}"
-                          >
-                            {{ current_return > 0 ? '+' : '' }}{{ current_return
-                            }}
-                          </div>
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </template>
-              </div>
+        <div class="why_intellitrader">
+          <h1 class="info_title">Why IntelliTrader?</h1>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Trade smart
+            with the power of AI<img class="why_item" src="./images/AI.png" />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No need to
+            pay for investment handlers<img
+              class="why_item"
+              src="./images/moneybag.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Track
+            investments 24/7 with 0 downtime<img
+              class="why_item"
+              src="./images/stockrising.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No prior
+            trading experience needed<img
+              class="why_item"
+              src="./images/brain.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Uses
+            financial news articles to predict stock trends<img
+              class="why_item"
+              src="./images/news.png"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="login_html">
+        <div class="login">
+          <div class="LoginBox">
+            <div class="loginImage">
+              <img src="./images/IntelliTraderDark.png" />
             </div>
-            <div class="row">
-              <div class="chart_box">
-                <canvas id="myChart"></canvas>
-              </div>
+            <div v-if="validationErrors" class="error_messages">
+              Please correct the following error(s):
+              <ul>
+                <li v-for="error in errorMessages">{{error}}</li>
+              </ul>
             </div>
-            <div class="row">
-              <div class="reports_box">
-                <div class="row">
-                  <h2>Reports</h2>
+            <!-- vmodel only for input when data is being sent back to code-->
+            <div class="new-user-inputs">
+              <div class="login_title">Login</div>
+              <label>
+                Email
+                <br />
+                <br />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  v-model="returningUserEmail"
+                />
+              </label>
+              <br />
+              <br />
+              <label>
+                Password
+                <br />
+                <br />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  v-model="returningUserPassword"
+                />
+              </label>
+            </div>
+            <br />
+            <br />
+            <button v-on:click="loginUser">Login</button>
+            <br />
+            <br />
+            <br />
+            <div class="question">
+              Don't have an account?
+              <a v-on:click="signOut" class="sign_in_link">sign up</a>
+            </div>
+          </div>
+        </div>
+        <div class="why_intellitrader">
+          <h1 class="info_title">Why IntelliTrader?</h1>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Trade smart
+            with the power of AI<img class="why_item" src="./images/AI.png" />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No need to
+            pay for investment handlers<img
+              class="why_item"
+              src="./images/moneybag.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Track
+            investments 24/7 with 0 downtime<img
+              class="why_item"
+              src="./images/stockrising.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No prior
+            trading experience needed<img
+              class="why_item"
+              src="./images/brain.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Uses
+            financial news articles to predict stock trends<img
+              class="why_item"
+              src="./images/news.png"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="new_user_html">
+        <div class="portfolio-form">
+          <!-- choose what symbols you want to Track and the amount you want to put in as well as cc info -->
+          <!-- this is my Vue app-->
+          <div class="login">
+            <div class="LoginBox">
+              <div class="loginImage">
+                <img src="./images/IntelliTraderDark.png" />
+              </div>
+              <!-- vmodel only for input when data is being sent back to code-->
+              <div class="new-user-inputs">
+                <div class="portfolio-form-container">
+                  <div class="login_title">Portfolio Preferences</div>
+                  <div class="portfolio-form-inputs">
+                    <label for="symbol" class="form-label">Symbol</label>
+                    <br />
+                    <br />
+                    <select class="symbol" v-model="selectedSymbol">
+                      <option v-for="symbol in symbols" :value="symbol">
+                        {{ symbol }}
+                      </option>
+                    </select>
+                    <ul>
+                      <li v-for="symbol in userInfo.symbols">{{ symbol }}</li>
+                    </ul>
+                    <br />
+                    <label for="amount" class="form-label">Amount</label>
+                    <br />
+                    <br />
+                    <input type="number" class="amount" v-model="amount" />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <button v-on:click="addSymbol">Add</button>
+                  </div>
                 </div>
-                <div class="row">
+              </div>
+              <br />
+              <br />
+              <br />
+              <div class="question"></div>
+            </div>
+          </div>
+        </div>
+        <div class="why_intellitrader">
+          <h1 class="info_title">Why IntelliTrader?</h1>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Trade smart
+            with the power of AI<img class="why_item" src="./images/AI.png" />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No need to
+            pay for investment handlers<img
+              class="why_item"
+              src="./images/moneybag.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Track
+            investments 24/7 with 0 downtime<img
+              class="why_item"
+              src="./images/stockrising.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> No prior
+            trading experience needed<img
+              class="why_item"
+              src="./images/brain.png"
+            />
+          </div>
+          <div class="why_intellitrader_item">
+            <img class="checkmark" src="./images/checkMark.png" /> Uses
+            financial news articles to predict stock trends<img
+              class="why_item"
+              src="./images/news.png"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="dashboard_html">
+        <div class="row">
+          <div class="rounded_column_container">
+            <div class="menu">
+              <img src="./images/IntelliTrader.png" class="logo" />
+              <img src="./images/anjolie.jpg" class="profile_pic" />
+              <div class="dashboard_ul_li">
+                <div class="dashboard_items_excluding_logout">
                   <ul>
-                    <li>
-                      <img src="./images/error.png" />
-                      Bot reported bad sentiment but did not sell, see article
-                      here:<a href="reports.html">article</a>
+                    <li class="home_clicked_item">
+                      <a> <img src="./images/dashboard.png" />Dashboard</a>
                     </li>
                     <li>
-                      <img src="./images/warning.png" />
-                      Bot reported bad sentiment and sold, see article here:<a
-                        href="reports.html"
-                        >article</a
+                      <a>
+                        <img src="./images/preferences.png" />
+                        Preferences</a
                       >
                     </li>
                     <li>
-                      <img src="./images/good2go.png" />
-                      Bot reported good sentiment and bought, see article
-                      here:<a href="reports.html">article</a>
+                      <a><img src="./images/transactions.png" />Transactions</a>
+                    </li>
+                    <li>
+                      <a><img src="./images/reports.png" />Reports</a>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
+            <li>
+              <button v-on:click="signOut" class="logout">Logout</button>
+            </li>
           </div>
-        </div>
-        <div class="rounded_column_container">
-          <h2>Transactions</h2>
-          <div class="transactions_box">
-            <ul>
-              <div
-                class="transaction_box"
-                v-for="(transaction, index) in transactions"
-                :key="index"
-              >
-                <div class="transaction">
-                  <li>
-                    {{ transaction.action }} {{ transaction.quantity }} shares
-                    of {{ transaction.symbol }} at ${{ transaction.price }}
-                    <br />
-                    <br />
-                    Date: {{ transaction.date }}
-                  </li>
+          <div class="not_rounded_column_container">
+            <div class="dashboard">
+              <h1 class="dashboard_text">Dashboard</h1>
+              <div class="row">
+                <div class="symbols_container">
+                  <template v-for="symbol in userSymbols">
+                    <a v-on:click="changeBackgroundColor(symbol)">
+                      <div
+                        class="stock_status_box"
+                        :style="{'background-color': symbol === selectedSymbol ? backgroundColor : ''}"
+                      >
+                        <div class="stock_status_text_symbol">{{ symbol }}</div>
+                        <div class="values">
+                          <h3 class="stock_amount">
+                            ${{ current_port_value }}
+                          </h3>
+                          <span>
+                            <div
+                              class="stock_above {{ current_return > 0 ? 'green' : 'red' }}"
+                            >
+                              {{ current_return > 0 ? '+' : '' }}{{
+                              current_return }}
+                            </div>
+                            <div
+                              class="stock_above {{ stockPercent > 0 ? 'green' : 'red' }}"
+                            >
+                              {{ stockPercent > 0 ? '+' : '' }}{{ stockPercent
+                              }}
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  </template>
                 </div>
               </div>
-            </ul>
+              <div class="row">
+                <div class="chart_box">
+                  <canvas id="myChart"></canvas>
+                </div>
+              </div>
+              <div class="row">
+                <div class="reports_box">
+                  <div class="row">
+                    <h2>Reports</h2>
+                  </div>
+                  <div class="row">
+                    <ul>
+                      <li>
+                        <img src="./images/error.png" />
+                        Bot reported bad sentiment but did not sell, see article
+                        here:<a>article</a>
+                      </li>
+                      <li>
+                        <img src="./images/warning.png" />
+                        Bot reported bad sentiment and sold, see article here:<a
+                          >article</a
+                        >
+                      </li>
+                      <li>
+                        <img src="./images/good2go.png" />
+                        Bot reported good sentiment and bought, see article
+                        here:<a>article</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rounded_column_container">
+            <h2>Transactions</h2>
+            <div class="transactions_box">
+              <ul>
+                <div
+                  class="transaction_box"
+                  v-for="(transaction, index) in transactions"
+                  :key="index"
+                >
+                  <div class="transaction">
+                    <li>
+                      {{ transaction.action }} {{ transaction.quantity }} shares
+                      of {{ transaction.symbol }} at ${{ transaction.price }}
+                      <br />
+                      <br />
+                      Date: {{ transaction.date }}
+                    </li>
+                  </div>
+                </div>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
