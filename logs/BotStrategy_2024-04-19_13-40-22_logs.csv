@@ -1,0 +1,473 @@
+2024-04-19 13:40:22,442: asyncio: INFO: [BotStrategy] Executing the initialize lifecycle method
+2024-04-19 13:40:23,430: root: INFO: Current backtesting datetime 2024-02-01 08:30:00-05:00
+2024-04-19 13:40:23,431: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:23,431: root: INFO: Current backtesting datetime 2024-02-01 09:30:00-05:00
+2024-04-19 13:40:23,431: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:23,432: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:23[0m
+2024-04-19 13:40:23,432: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:23,929: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:25,377: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:25[0m
+2024-04-19 13:40:25,378: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:25,379: root: INFO: Current backtesting datetime 2024-02-01 16:00:00-05:00
+2024-04-19 13:40:25,379: root: INFO: Current backtesting datetime 2024-02-02 09:30:00-05:00
+2024-04-19 13:40:25,379: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:25[0m
+2024-04-19 13:40:25,379: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:25,380: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:25,770: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:25[0m
+2024-04-19 13:40:25,772: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:25,773: root: INFO: Current backtesting datetime 2024-02-02 16:00:00-05:00
+2024-04-19 13:40:25,773: root: INFO: Current backtesting datetime 2024-02-03 09:30:00-05:00
+2024-04-19 13:40:25,774: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:25,776: root: INFO: Current backtesting datetime 2024-02-03 09:29:00-05:00
+2024-04-19 13:40:25,777: root: INFO: Current backtesting datetime 2024-02-03 09:29:00-05:00
+2024-04-19 13:40:25,777: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:25,778: root: INFO: Current backtesting datetime 2024-02-05 08:30:00-05:00
+2024-04-19 13:40:25,779: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:25,780: root: INFO: Current backtesting datetime 2024-02-05 09:30:00-05:00
+2024-04-19 13:40:25,780: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:25,781: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:25[0m
+2024-04-19 13:40:25,781: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:25,783: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,156: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,159: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:26,160: root: INFO: Current backtesting datetime 2024-02-05 16:00:00-05:00
+2024-04-19 13:40:26,160: root: INFO: Current backtesting datetime 2024-02-06 09:30:00-05:00
+2024-04-19 13:40:26,160: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,161: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,162: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,477: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,479: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:26,480: root: INFO: Current backtesting datetime 2024-02-06 16:00:00-05:00
+2024-04-19 13:40:26,480: root: INFO: Current backtesting datetime 2024-02-07 09:30:00-05:00
+2024-04-19 13:40:26,481: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,481: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,482: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,823: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,825: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:26,826: root: INFO: Current backtesting datetime 2024-02-07 16:00:00-05:00
+2024-04-19 13:40:26,826: root: INFO: Current backtesting datetime 2024-02-08 09:30:00-05:00
+2024-04-19 13:40:26,827: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:26[0m
+2024-04-19 13:40:26,827: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:26,829: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,165: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,167: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:27,167: root: INFO: Current backtesting datetime 2024-02-08 16:00:00-05:00
+2024-04-19 13:40:27,168: root: INFO: Current backtesting datetime 2024-02-09 09:30:00-05:00
+2024-04-19 13:40:27,168: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,168: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,170: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,545: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,546: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:27,547: root: INFO: Current backtesting datetime 2024-02-09 16:00:00-05:00
+2024-04-19 13:40:27,548: root: INFO: Current backtesting datetime 2024-02-10 09:30:00-05:00
+2024-04-19 13:40:27,548: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:27,550: root: INFO: Current backtesting datetime 2024-02-10 09:29:00-05:00
+2024-04-19 13:40:27,551: root: INFO: Current backtesting datetime 2024-02-10 09:29:00-05:00
+2024-04-19 13:40:27,551: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:27,552: root: INFO: Current backtesting datetime 2024-02-12 08:30:00-05:00
+2024-04-19 13:40:27,553: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:27,554: root: INFO: Current backtesting datetime 2024-02-12 09:30:00-05:00
+2024-04-19 13:40:27,554: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:27,555: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,555: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,557: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,820: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,821: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:27,822: root: INFO: Current backtesting datetime 2024-02-12 16:00:00-05:00
+2024-04-19 13:40:27,822: root: INFO: Current backtesting datetime 2024-02-13 09:30:00-05:00
+2024-04-19 13:40:27,823: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:27[0m
+2024-04-19 13:40:27,823: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:27,824: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:28,146: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:28[0m
+2024-04-19 13:40:28,147: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:28,148: root: INFO: Current backtesting datetime 2024-02-13 16:00:00-05:00
+2024-04-19 13:40:28,148: root: INFO: Current backtesting datetime 2024-02-14 09:30:00-05:00
+2024-04-19 13:40:28,149: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:28[0m
+2024-04-19 13:40:28,149: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:28,150: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:28,480: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:28[0m
+2024-04-19 13:40:28,482: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:28,483: root: INFO: Current backtesting datetime 2024-02-14 16:00:00-05:00
+2024-04-19 13:40:28,483: root: INFO: Current backtesting datetime 2024-02-15 09:30:00-05:00
+2024-04-19 13:40:28,484: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:28[0m
+2024-04-19 13:40:28,484: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:28,485: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:29,832: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:29[0m
+2024-04-19 13:40:29,835: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:29,836: root: INFO: Current backtesting datetime 2024-02-15 16:00:00-05:00
+2024-04-19 13:40:29,836: root: INFO: Current backtesting datetime 2024-02-16 09:30:00-05:00
+2024-04-19 13:40:29,837: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:29[0m
+2024-04-19 13:40:29,837: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:29,838: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,313: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,315: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:30,316: root: INFO: Current backtesting datetime 2024-02-16 16:00:00-05:00
+2024-04-19 13:40:30,316: root: INFO: Current backtesting datetime 2024-02-17 09:30:00-05:00
+2024-04-19 13:40:30,317: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:30,318: root: INFO: Current backtesting datetime 2024-02-17 09:29:00-05:00
+2024-04-19 13:40:30,319: root: INFO: Current backtesting datetime 2024-02-17 09:29:00-05:00
+2024-04-19 13:40:30,319: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:30,320: root: INFO: Current backtesting datetime 2024-02-20 08:30:00-05:00
+2024-04-19 13:40:30,321: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:30,321: root: INFO: Current backtesting datetime 2024-02-20 09:30:00-05:00
+2024-04-19 13:40:30,321: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:30,323: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,323: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,324: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,508: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,510: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:30,511: root: INFO: Current backtesting datetime 2024-02-20 16:00:00-05:00
+2024-04-19 13:40:30,511: root: INFO: Current backtesting datetime 2024-02-21 09:30:00-05:00
+2024-04-19 13:40:30,511: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,511: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,513: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,808: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,809: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:30,810: root: INFO: Current backtesting datetime 2024-02-21 16:00:00-05:00
+2024-04-19 13:40:30,811: root: INFO: Current backtesting datetime 2024-02-22 09:30:00-05:00
+2024-04-19 13:40:30,811: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:30[0m
+2024-04-19 13:40:30,811: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:30,812: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,104: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,105: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:31,106: root: INFO: Current backtesting datetime 2024-02-22 16:00:00-05:00
+2024-04-19 13:40:31,106: root: INFO: Current backtesting datetime 2024-02-23 09:30:00-05:00
+2024-04-19 13:40:31,107: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,107: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,108: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,386: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,387: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:31,388: root: INFO: Current backtesting datetime 2024-02-23 16:00:00-05:00
+2024-04-19 13:40:31,388: root: INFO: Current backtesting datetime 2024-02-24 09:30:00-05:00
+2024-04-19 13:40:31,389: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:31,390: root: INFO: Current backtesting datetime 2024-02-24 09:29:00-05:00
+2024-04-19 13:40:31,391: root: INFO: Current backtesting datetime 2024-02-24 09:29:00-05:00
+2024-04-19 13:40:31,391: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:31,392: root: INFO: Current backtesting datetime 2024-02-26 08:30:00-05:00
+2024-04-19 13:40:31,393: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:31,394: root: INFO: Current backtesting datetime 2024-02-26 09:30:00-05:00
+2024-04-19 13:40:31,394: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:31,395: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,395: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,396: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,816: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,817: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:31,818: root: INFO: Current backtesting datetime 2024-02-26 16:00:00-05:00
+2024-04-19 13:40:31,818: root: INFO: Current backtesting datetime 2024-02-27 09:30:00-05:00
+2024-04-19 13:40:31,818: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:31[0m
+2024-04-19 13:40:31,819: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:31,820: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,041: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,042: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:32,043: root: INFO: Current backtesting datetime 2024-02-27 16:00:00-05:00
+2024-04-19 13:40:32,043: root: INFO: Current backtesting datetime 2024-02-28 09:30:00-05:00
+2024-04-19 13:40:32,044: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,044: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,045: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,284: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,285: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:32,286: root: INFO: Current backtesting datetime 2024-02-28 16:00:00-05:00
+2024-04-19 13:40:32,286: root: INFO: Current backtesting datetime 2024-02-29 09:30:00-05:00
+2024-04-19 13:40:32,286: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,286: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,287: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,522: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,523: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:32,524: root: INFO: Current backtesting datetime 2024-02-29 16:00:00-05:00
+2024-04-19 13:40:32,524: root: INFO: Current backtesting datetime 2024-03-01 09:30:00-05:00
+2024-04-19 13:40:32,525: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,525: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,526: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,823: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,824: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:32,825: root: INFO: Current backtesting datetime 2024-03-01 16:00:00-05:00
+2024-04-19 13:40:32,825: root: INFO: Current backtesting datetime 2024-03-02 09:30:00-05:00
+2024-04-19 13:40:32,826: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:32,827: root: INFO: Current backtesting datetime 2024-03-02 09:29:00-05:00
+2024-04-19 13:40:32,828: root: INFO: Current backtesting datetime 2024-03-02 09:29:00-05:00
+2024-04-19 13:40:32,828: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:32,829: root: INFO: Current backtesting datetime 2024-03-04 08:30:00-05:00
+2024-04-19 13:40:32,829: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:32,830: root: INFO: Current backtesting datetime 2024-03-04 09:30:00-05:00
+2024-04-19 13:40:32,830: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:32,831: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:32[0m
+2024-04-19 13:40:32,831: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:32,832: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,111: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,113: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:33,113: root: INFO: Current backtesting datetime 2024-03-04 16:00:00-05:00
+2024-04-19 13:40:33,114: root: INFO: Current backtesting datetime 2024-03-05 09:30:00-05:00
+2024-04-19 13:40:33,114: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,114: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,115: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,409: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,410: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:33,411: root: INFO: Current backtesting datetime 2024-03-05 16:00:00-05:00
+2024-04-19 13:40:33,411: root: INFO: Current backtesting datetime 2024-03-06 09:30:00-05:00
+2024-04-19 13:40:33,412: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,412: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,413: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,677: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,679: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:33,679: root: INFO: Current backtesting datetime 2024-03-06 16:00:00-05:00
+2024-04-19 13:40:33,680: root: INFO: Current backtesting datetime 2024-03-07 09:30:00-05:00
+2024-04-19 13:40:33,680: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,680: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,681: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,946: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,947: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:33,948: root: INFO: Current backtesting datetime 2024-03-07 16:00:00-05:00
+2024-04-19 13:40:33,948: root: INFO: Current backtesting datetime 2024-03-08 09:30:00-05:00
+2024-04-19 13:40:33,949: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:33[0m
+2024-04-19 13:40:33,949: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:33,950: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,214: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,215: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:34,216: root: INFO: Current backtesting datetime 2024-03-08 16:00:00-05:00
+2024-04-19 13:40:34,216: root: INFO: Current backtesting datetime 2024-03-09 09:30:00-05:00
+2024-04-19 13:40:34,217: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:34,218: root: INFO: Current backtesting datetime 2024-03-09 09:29:00-05:00
+2024-04-19 13:40:34,219: root: INFO: Current backtesting datetime 2024-03-09 09:29:00-05:00
+2024-04-19 13:40:34,219: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:34,220: root: INFO: Current backtesting datetime 2024-03-11 07:30:00-05:00
+2024-04-19 13:40:34,220: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:34,221: root: INFO: Current backtesting datetime 2024-03-11 08:30:00-05:00
+2024-04-19 13:40:34,221: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:34,222: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,222: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,223: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,431: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,432: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:34,433: root: INFO: Current backtesting datetime 2024-03-11 15:00:00-05:00
+2024-04-19 13:40:34,433: root: INFO: Current backtesting datetime 2024-03-12 08:30:00-05:00
+2024-04-19 13:40:34,434: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,434: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,435: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,649: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,650: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:34,651: root: INFO: Current backtesting datetime 2024-03-12 15:00:00-05:00
+2024-04-19 13:40:34,651: root: INFO: Current backtesting datetime 2024-03-13 08:30:00-05:00
+2024-04-19 13:40:34,652: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,652: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,653: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,962: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,963: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:34,964: root: INFO: Current backtesting datetime 2024-03-13 15:00:00-05:00
+2024-04-19 13:40:34,964: root: INFO: Current backtesting datetime 2024-03-14 08:30:00-05:00
+2024-04-19 13:40:34,965: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:34[0m
+2024-04-19 13:40:34,965: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:34,966: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,248: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,250: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:35,250: root: INFO: Current backtesting datetime 2024-03-14 15:00:00-05:00
+2024-04-19 13:40:35,251: root: INFO: Current backtesting datetime 2024-03-15 08:30:00-05:00
+2024-04-19 13:40:35,251: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,251: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,252: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,540: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,541: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:35,542: root: INFO: Current backtesting datetime 2024-03-15 15:00:00-05:00
+2024-04-19 13:40:35,542: root: INFO: Current backtesting datetime 2024-03-16 08:30:00-05:00
+2024-04-19 13:40:35,543: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:35,544: root: INFO: Current backtesting datetime 2024-03-16 08:29:00-05:00
+2024-04-19 13:40:35,545: root: INFO: Current backtesting datetime 2024-03-16 08:29:00-05:00
+2024-04-19 13:40:35,545: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:35,546: root: INFO: Current backtesting datetime 2024-03-18 07:30:00-05:00
+2024-04-19 13:40:35,547: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:35,547: root: INFO: Current backtesting datetime 2024-03-18 08:30:00-05:00
+2024-04-19 13:40:35,547: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:35,548: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,548: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,549: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,840: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,842: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:35,843: root: INFO: Current backtesting datetime 2024-03-18 15:00:00-05:00
+2024-04-19 13:40:35,843: root: INFO: Current backtesting datetime 2024-03-19 08:30:00-05:00
+2024-04-19 13:40:35,843: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:35[0m
+2024-04-19 13:40:35,843: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:35,844: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,170: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,171: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:36,172: root: INFO: Current backtesting datetime 2024-03-19 15:00:00-05:00
+2024-04-19 13:40:36,172: root: INFO: Current backtesting datetime 2024-03-20 08:30:00-05:00
+2024-04-19 13:40:36,173: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,173: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,174: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,470: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,471: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:36,472: root: INFO: Current backtesting datetime 2024-03-20 15:00:00-05:00
+2024-04-19 13:40:36,472: root: INFO: Current backtesting datetime 2024-03-21 08:30:00-05:00
+2024-04-19 13:40:36,473: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,473: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,474: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,781: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,782: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:36,783: root: INFO: Current backtesting datetime 2024-03-21 15:00:00-05:00
+2024-04-19 13:40:36,783: root: INFO: Current backtesting datetime 2024-03-22 08:30:00-05:00
+2024-04-19 13:40:36,783: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:36[0m
+2024-04-19 13:40:36,783: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:36,784: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,089: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,091: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:37,092: root: INFO: Current backtesting datetime 2024-03-22 15:00:00-05:00
+2024-04-19 13:40:37,092: root: INFO: Current backtesting datetime 2024-03-23 08:30:00-05:00
+2024-04-19 13:40:37,092: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:37,094: root: INFO: Current backtesting datetime 2024-03-23 08:29:00-05:00
+2024-04-19 13:40:37,095: root: INFO: Current backtesting datetime 2024-03-23 08:29:00-05:00
+2024-04-19 13:40:37,095: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:37,096: root: INFO: Current backtesting datetime 2024-03-25 07:30:00-05:00
+2024-04-19 13:40:37,096: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:37,097: root: INFO: Current backtesting datetime 2024-03-25 08:30:00-05:00
+2024-04-19 13:40:37,097: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:37,098: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,098: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,099: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,354: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,355: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:37,356: root: INFO: Current backtesting datetime 2024-03-25 15:00:00-05:00
+2024-04-19 13:40:37,356: root: INFO: Current backtesting datetime 2024-03-26 08:30:00-05:00
+2024-04-19 13:40:37,357: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,357: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,358: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,587: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,588: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:37,589: root: INFO: Current backtesting datetime 2024-03-26 15:00:00-05:00
+2024-04-19 13:40:37,589: root: INFO: Current backtesting datetime 2024-03-27 08:30:00-05:00
+2024-04-19 13:40:37,590: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,590: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,591: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,944: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,946: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:37,947: root: INFO: Current backtesting datetime 2024-03-27 15:00:00-05:00
+2024-04-19 13:40:37,947: root: INFO: Current backtesting datetime 2024-03-28 08:30:00-05:00
+2024-04-19 13:40:37,947: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:37[0m
+2024-04-19 13:40:37,948: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:37,949: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,315: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,317: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:38,317: root: INFO: Current backtesting datetime 2024-03-28 15:00:00-05:00
+2024-04-19 13:40:38,318: root: INFO: Current backtesting datetime 2024-03-29 08:30:00-05:00
+2024-04-19 13:40:38,318: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:38,319: root: INFO: Current backtesting datetime 2024-03-29 08:29:00-05:00
+2024-04-19 13:40:38,320: root: INFO: Current backtesting datetime 2024-03-29 08:29:00-05:00
+2024-04-19 13:40:38,321: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:38,321: root: INFO: Current backtesting datetime 2024-04-01 07:30:00-05:00
+2024-04-19 13:40:38,322: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:38,322: root: INFO: Current backtesting datetime 2024-04-01 08:30:00-05:00
+2024-04-19 13:40:38,322: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:38,324: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,324: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,325: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,529: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,530: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:38,531: root: INFO: Current backtesting datetime 2024-04-01 15:00:00-05:00
+2024-04-19 13:40:38,531: root: INFO: Current backtesting datetime 2024-04-02 08:30:00-05:00
+2024-04-19 13:40:38,532: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,532: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,533: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,904: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,906: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:38,907: root: INFO: Current backtesting datetime 2024-04-02 15:00:00-05:00
+2024-04-19 13:40:38,907: root: INFO: Current backtesting datetime 2024-04-03 08:30:00-05:00
+2024-04-19 13:40:38,907: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:38[0m
+2024-04-19 13:40:38,908: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:38,909: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,169: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,170: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:39,171: root: INFO: Current backtesting datetime 2024-04-03 15:00:00-05:00
+2024-04-19 13:40:39,171: root: INFO: Current backtesting datetime 2024-04-04 08:30:00-05:00
+2024-04-19 13:40:39,172: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,172: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,173: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,466: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,467: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:39,468: root: INFO: Current backtesting datetime 2024-04-04 15:00:00-05:00
+2024-04-19 13:40:39,468: root: INFO: Current backtesting datetime 2024-04-05 08:30:00-05:00
+2024-04-19 13:40:39,469: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,469: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,470: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,804: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,806: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:39,807: root: INFO: Current backtesting datetime 2024-04-05 15:00:00-05:00
+2024-04-19 13:40:39,807: root: INFO: Current backtesting datetime 2024-04-06 08:30:00-05:00
+2024-04-19 13:40:39,807: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:39,809: root: INFO: Current backtesting datetime 2024-04-06 08:29:00-05:00
+2024-04-19 13:40:39,810: root: INFO: Current backtesting datetime 2024-04-06 08:29:00-05:00
+2024-04-19 13:40:39,810: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:39,810: root: INFO: Current backtesting datetime 2024-04-08 07:30:00-05:00
+2024-04-19 13:40:39,811: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:39,812: root: INFO: Current backtesting datetime 2024-04-08 08:30:00-05:00
+2024-04-19 13:40:39,812: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:39,813: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:39[0m
+2024-04-19 13:40:39,813: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:39,814: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,071: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,072: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:40,073: root: INFO: Current backtesting datetime 2024-04-08 15:00:00-05:00
+2024-04-19 13:40:40,073: root: INFO: Current backtesting datetime 2024-04-09 08:30:00-05:00
+2024-04-19 13:40:40,074: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,074: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,075: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,312: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,313: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:40,314: root: INFO: Current backtesting datetime 2024-04-09 15:00:00-05:00
+2024-04-19 13:40:40,314: root: INFO: Current backtesting datetime 2024-04-10 08:30:00-05:00
+2024-04-19 13:40:40,315: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,315: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,316: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,612: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,614: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:40,614: root: INFO: Current backtesting datetime 2024-04-10 15:00:00-05:00
+2024-04-19 13:40:40,615: root: INFO: Current backtesting datetime 2024-04-11 08:30:00-05:00
+2024-04-19 13:40:40,615: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,615: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,616: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,828: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,829: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:40,830: root: INFO: Current backtesting datetime 2024-04-11 15:00:00-05:00
+2024-04-19 13:40:40,830: root: INFO: Current backtesting datetime 2024-04-12 08:30:00-05:00
+2024-04-19 13:40:40,831: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:40[0m
+2024-04-19 13:40:40,831: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:40,832: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,086: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,088: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:41,088: root: INFO: Current backtesting datetime 2024-04-12 15:00:00-05:00
+2024-04-19 13:40:41,089: root: INFO: Current backtesting datetime 2024-04-13 08:30:00-05:00
+2024-04-19 13:40:41,089: asyncio: INFO: [BotStrategy] [34mThe market is not currently open, skipping this trading iteration[0m
+2024-04-19 13:40:41,090: root: INFO: Current backtesting datetime 2024-04-13 08:29:00-05:00
+2024-04-19 13:40:41,091: root: INFO: Current backtesting datetime 2024-04-13 08:29:00-05:00
+2024-04-19 13:40:41,091: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:41,092: root: INFO: Current backtesting datetime 2024-04-15 07:30:00-05:00
+2024-04-19 13:40:41,093: asyncio: INFO: [BotStrategy] Executing the before_market_opens lifecycle method
+2024-04-19 13:40:41,093: root: INFO: Current backtesting datetime 2024-04-15 08:30:00-05:00
+2024-04-19 13:40:41,093: asyncio: INFO: [BotStrategy] Executing the before_starting_trading lifecycle method
+2024-04-19 13:40:41,094: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,095: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,096: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,393: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,395: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:41,397: root: INFO: Current backtesting datetime 2024-04-15 15:00:00-05:00
+2024-04-19 13:40:41,397: root: INFO: Current backtesting datetime 2024-04-16 08:30:00-05:00
+2024-04-19 13:40:41,398: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,398: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,399: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,788: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,790: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:41,791: root: INFO: Current backtesting datetime 2024-04-16 15:00:00-05:00
+2024-04-19 13:40:41,791: root: INFO: Current backtesting datetime 2024-04-17 08:30:00-05:00
+2024-04-19 13:40:41,792: asyncio: INFO: [BotStrategy] [34mExecuting the on_trading_iteration lifecycle method at 2024-04-19 13:40:41[0m
+2024-04-19 13:40:41,792: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:41,793: root: WARNING: quote is not implemented for YahooData, but USD was passed as the quote
+2024-04-19 13:40:42,083: asyncio: INFO: [BotStrategy] [34mTrading iteration ended at 2024-04-19 13:40:42[0m
+2024-04-19 13:40:42,084: asyncio: INFO: [BotStrategy] [34mSleeping for 86400 seconds[0m
+2024-04-19 13:40:42,085: root: INFO: Current backtesting datetime 2024-04-17 15:00:00-05:00
+2024-04-19 13:40:42,085: root: INFO: Current backtesting datetime 2024-04-18 08:30:00-05:00
+2024-04-19 13:40:42,086: root: INFO: Current backtesting datetime 2024-04-18 14:59:00-05:00
+2024-04-19 13:40:42,086: asyncio: INFO: [BotStrategy] Executing the before_market_closes lifecycle method
+2024-04-19 13:40:42,087: root: INFO: Current backtesting datetime 2024-04-18 15:00:00-05:00
+2024-04-19 13:40:42,087: asyncio: INFO: [BotStrategy] Executing the after_market_closes lifecycle method
+2024-04-19 13:40:42,087: asyncio: INFO: [BotStrategy] Executing the on_strategy_end lifecycle method
+2024-04-19 13:40:42,790: root: INFO: Backtesting finished
+2024-04-19 13:40:42,916: root: INFO: There were no trades in this backtest.
+2024-04-19 13:40:43,276: root: ERROR: Not enough data to create a tearsheet, at least 2 days of data are required. Skipping
+2024-04-19 13:40:43,276: backtest_stats: INFO: Backtest took 0:00:20.835101 for a speed of 0.000

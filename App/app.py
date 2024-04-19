@@ -1,24 +1,35 @@
-import sys
-sys.path.append('./backend')
-import json
-from flask import send_file
-from flask import Flask, jsonify, session, request
-from flask_cors import CORS
-from flask_pymongo import PyMongo
-from bson import ObjectId
-from flask import Flask, jsonify, request
-from dotenv import load_dotenv
-import bcrypt
-import os
-from subprocess import Popen, PIPE
-from flask_session import Session
-import logging
 # from apscheduler.schedulers.background import BackgroundScheduler
 # from backend.tradingbot import BotStrategy
 # from datetime import datetime, timedelta
 # from lumibot.backtesting import YahooDataBacktesting
 # from alpaca_trade_api import REST
-
+# lumibot is a trading library that allows you to backtest and trade stocks using a variety of strategies.
+# Alpaca is a brokerage that allows you to trade stocks using an API and provides a paper trading environment.
+# YahooDataBacktesting is a class that allows you to backtest a strategy using historical stock data from Yahoo Finance.
+# This strategy uses finbert_utils to estimate the sentiment of news articles and uses that to determine if it should buy or sell a stock.
+import sys
+sys.path.append('./backend')
+from flask import send_file
+from flask import Flask, jsonify, session, request
+from flask_cors import CORS
+from flask_pymongo import PyMongo
+from bson import ObjectId
+from dotenv import load_dotenv
+import bcrypt
+from subprocess import PIPE
+from flask_session import Session
+from lumibot.backtesting import YahooDataBacktesting
+from datetime import datetime
+from flask import abort
+import os
+from tradingbot import BotStrategy, BENCHMARK_ASSET
+import traceback
+from lumibot.backtesting import YahooDataBacktesting
+from datetime import timedelta
+import threading
+from multiprocessing import Process
+import glob
+import random
 
 load_dotenv()
 
@@ -34,6 +45,7 @@ AMOUNT = 0
 
 
 app = Flask(__name__)
+
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config["MONGO_URI"] = MONGO_URI
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') 
@@ -44,11 +56,54 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'None'
 mongo = PyMongo(app)
 Session(app)
 
-# bot = BotStrategy()
 
 users = mongo.db.users
+def run_backtest(start, end, symbol, user):
+    print('start in run_backtest:', start)  
+    print('end in run_backtest:', end)
+    end_str = str(end)
+    trade_file = str(f"{user}_{end_str}_{symbol}_trades.csv")
+    stat_file = str(f"{user}_{end_str}_{symbol}_stats.csv")
+    with open(trade_file, 'w') as file:
+        pass
+    print('symbol:', symbol)
+    with open('file.txt', 'w') as f:
+        f.write(symbol)
+    random_positive_file_name = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=10))
+    print('Random positive file name:', random_positive_file_name)
+    with open("random_positive_file.txt", "w") as f:
+        f.write(random_positive_file_name)
+        
+    BotStrategy.backtest(
+    YahooDataBacktesting,
+    start,
+    end,
+    stats_file=stat_file,
+    benchmark_asset=symbol,
+    trades_file=trade_file,
+    )
 
-from flask import abort
+@app.route('/run_trading_bot', methods=['POST'])
+def run_trading_bot_background():
+    try:
+        if 'user_id' in session:
+            user_id = session['user_id']
+            user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            end = user['most_recent_date']
+            start = (datetime.now() - timedelta(days=365)).replace(hour=0, minute=0, second=0, microsecond=0)
+            symbol = user['symbols'][0]['symbol']['symbol']
+            print('User:', user)
+            print('symbol:', symbol)
+            passed_id = user['_id']
+            p = Process(target=run_backtest, args=(start, end, symbol, passed_id))
+            p.start()
+            return jsonify({'message': 'Bot is running'}), 200
+    except Exception as e:
+        print('Error:', e)
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/session', methods=['POST'])
 def login_user():
@@ -68,16 +123,20 @@ def login_user():
             abort(401, "Invalid password")
 
         session['user_id'] = str(user['_id'])
+        user_id = session['user_id']
         user['_id'] = str(user['_id'])
+        user['most_recent_date'] = datetime.now() - timedelta(days=1)
         #if first login send first login message and update first login to false
         if user['first_login']:
             user['first_login'] = False
             query = {'_id': ObjectId(user['_id'])}
-            new_values = {'$set': {'first_login': False}}
+            new_values = {'$set': {'first_login': False, 'most_recent_date': user['most_recent_date']}}
             mongo.db.users.update_one(query, new_values)
             print(session)
             return jsonify({'message': 'First login', 'user': user}), 201
-        #not first login send authenticated message
+        query = {'_id': ObjectId(user['_id'])}
+        new_values = {'$set': {'most_recent_date': user['most_recent_date']}}
+        mongo.db.users.update_one(query, new_values)
         return jsonify({'message': 'Authenticated', 'user': user}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -127,8 +186,10 @@ def create_user():
             'email': email,
             'birthday': birthday,
             'password': bcrypt_password,
-            'symbols': {},
-            'first_login': True,    
+            'symbols': [],
+            'first_login': True,  
+            'start_date': None, 
+            'most_recent_date': None,
         }
         inserted_user = mongo.db.users.insert_one(new_user)
         user_id = inserted_user.inserted_id
@@ -143,18 +204,16 @@ def add_symbol():
         data = request.get_json()
         print('Received data:', data)  
         symbols = data.get('symbols')
-        cc = data.get('cc')
         user_id = session['user_id']
         print('User ID:', user_id)  
         user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
         print('User:', user)  
         if user:
-            if 'symbols' not in user:
-                user['symbols'] = {}
-            for symbol, amount in symbols.items():
-                user['symbols'][symbol] = amount
+            user['symbols'].append({'symbol': symbols})
+            user['start_date'] =  datetime.now()- timedelta(days=365)
+            user['most_recent_date'] = datetime.now() - timedelta(days=1)
             query = {'_id': ObjectId(user_id)}
-            new_values = {'$set': {'symbols': user['symbols'], 'cc': cc}}
+            new_values = {'$set': {'symbols': user['symbols'], 'start_date': user['start_date'], 'most_recent_date': user['most_recent_date']}}
             mongo.db.users.update_one(query, new_values)
             return jsonify({'message': 'Symbol added successfully'}), 201
         else:
@@ -163,23 +222,147 @@ def add_symbol():
         print('Exception:', e)  
         return jsonify({'error': str(e)}), 500
     
+def get_csv_by_name(name):
+    current_directory = os.getcwd()
+    for root, dirs, files in os.walk(current_directory):
+        for file in files:
+            if file == name:
+                return os.path.join(root, file)
+    return None
+
+@app.route('/get-positive-news', methods=['GET'])
+def get_positive_news():
+    print('Session:', session)
+    try:
+        if 'user_id' not in session:
+            return jsonify({'error': 'User ID not found in session'}), 404
+        
+        user_id = session['user_id']
+        print('User ID:', user_id)
+        
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            with open('random_positive_file.txt', 'r') as file:
+                lines = file.readlines()
+                if lines:
+                    last_line = lines[-1].strip()
+                    stats_file = get_csv_by_name(last_line+".csv")
+                    if stats_file is None:
+                        print('File not found')
+                        return jsonify({'error': 'File not found'}), 404
+                    return send_file(stats_file), 200
+                else:
+                    print('No lines found in file')
+                    return jsonify({'error': 'No lines found in file'}), 404
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        print(f"Error while trying to send file: {e}")
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/get-negative-news', methods=['GET'])
+def get_negative_news():
+    print('Session:', session)
+    try:
+        if 'user_id' not in session:
+            return jsonify({'error': 'User ID not found in session'}), 404
+        
+        user_id = session['user_id']
+        print('User ID:', user_id)
+        
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            with open('random_negative_file.txt', 'r') as file:
+                lines = file.readlines()
+                if lines:
+                    last_line = lines[-1].strip()
+                    stats_file = get_csv_by_name(last_line+".csv")
+                    if stats_file is None:
+                        print('File not found')
+                        return jsonify({'error': 'File not found'}), 404
+                    return send_file(stats_file), 200
+                else:
+                    print('No lines found in file')
+                    return jsonify({'error': 'No lines found in file'}), 404
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        print(f"Error while trying to send file: {e}")
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/get-csv-stats', methods=['GET'])
 def get_csv_stats():
+    print('Session:', session)
     try:
-        return send_file('BotStrategy_2024-04-14_19-11-08_stats.csv')
+        if 'user_id' not in session:
+            return jsonify({'error': 'User ID not found in session'}), 404
+        
+        user_id = session['user_id']
+        print('User ID:', user_id)
+        
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            print('most recent date:', user['most_recent_date'], 'Symbols:', user['symbols'][0]['symbol']['symbol'])
+
+            end_name = f"{user['_id']}_{user['most_recent_date']}_{user['symbols'][0]['symbol']['symbol']}_stats.csv"
+            print('End name:', end_name)
+            stats_file = get_csv_by_name(end_name)
+            if stats_file is None:
+                return jsonify({'error': 'File not found'}), 404
+            return send_file(stats_file), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
     except Exception as e:
         print(f"Error while trying to send file: {e}")
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
+
+def get_most_recent_trades_file():
+    folder_path = os.path.join(os.getcwd(), 'App/logs')
+    files = []
+    for file in glob.glob(os.path.join(folder_path, '*_trades.csv')):
+        if file.endswith('trades.csv'):
+            files.append(file)
+    return files[-1] if files else None
+    
+
 
 @app.route('/get-csv-trades', methods=['GET'])
 def get_csv_trades():
+    print('Session:', session)
     try:
-        return send_file('BotStrategy_2024-04-14_19-14-56_trades.csv')
+        if 'user_id' not in session:
+            return jsonify({'error': 'User ID not found in session'}), 404
+        
+        user_id = session['user_id']
+        print('User ID:', user_id)
+        
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            user['_id'] = str(user['_id'])
+            # print('most recent date:', user['most_recent_date'], 'Symbols:', user['symbols']['symbol'])
+
+            # end_name = f"{user['_id']}_{user['most_recent_date']}_{user['symbols']['symbol']}_trades.csv"
+            # print('End name:', end_name)
+            stats_file = get_most_recent_trades_file()
+            if stats_file is None:
+                traceback.print_exc()
+                return jsonify({'error': 'File not found'}), 404
+            print('Stats file:', stats_file)
+            return send_file(stats_file), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
     except Exception as e:
         print(f"Error while trying to send file: {e}")
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     
+
 # @app.route('/get_news', methods=['GET'])
 # def get_news():
 #     data = request.get_json()
@@ -260,4 +443,5 @@ def get_csv_trades():
 #     bot.backtest(YahooDataBacktesting, start_date=start_date, end_date=today, benchmark_asset=symbol)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, threaded=True)
+

@@ -353,21 +353,17 @@
                   </div>
                   <div class="row">
                     <ul>
-                      <li>
-                        <img src="./images/error.png" />
-                        Bot reported bad sentiment but did not sell, see article
-                        here:<a>article</a>
+                      <li v-for="article in positiveNews">
+                      <img :src="article.sentiment === 'positive' ? './images/good2go.png' : './images/warning.png'" />
+                      Bot reported a {{ article.sentiment }} sentiment
+                      <a :href="article.url">article</a>
                       </li>
-                      <li>
-                        <img src="./images/warning.png" />
-                        Bot reported bad sentiment and sold, see article here:<a
-                          >article</a
-                        >
-                      </li>
-                      <li>
-                        <img src="./images/good2go.png" />
-                        Bot reported good sentiment and bought, see article
-                        here:<a>article</a>
+                    </ul>
+                    </ul>
+                    <ul>
+                      <li v-for="article in negativeNews">
+                        {{ article.url}}
+                        <img src="./images/bad.png" />
                       </li>
                     </ul>
                   </div>

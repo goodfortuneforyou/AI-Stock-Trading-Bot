@@ -18,12 +18,14 @@ Vue.createApp({
       current_return: "",
       current_port_value: "",
       transactions: [],
-      symbols: ["AAPL", "GOOGL", "AMZN", "TSLA", "MSFT", "NFLX", "FB", "NVDA"],
+      symbols: ["AAPL", "GOOGL", "AMZN", "TSLA", "NFLX", "NVDA", "SPY"],
       backgroundColor: "rgba(97, 102, 97, 0.45)",
       selectedSymbol: "",
       amount: 0,
       stockPercent: 0,
       userSymbols: [],
+      negativeNews: [],
+      positiveNews: [],
     };
   },
 
@@ -38,17 +40,6 @@ Vue.createApp({
         .then((userData) => {
           console.log("User Info:", userData);
           this.userInfo = userData.user;
-          this.loadTransactions();
-
-          for (let symbol of Object.keys(this.userInfo.symbols)) {
-            if (symbol == "symbol") {
-              this.userSymbols.push(this.userInfo.symbols[symbol]);
-            }
-          }
-          console.log("User Symbols:", this.userSymbols);
-        })
-        .catch((error) => {
-          console.error("Error fetching user info:", error);
         });
     },
 
@@ -147,7 +138,7 @@ Vue.createApp({
         });
     },
 
-    loginUser: function () {
+    loginUser: async function () {
       // if (!this.validateReturningUserInputs()) return;
       const requestOptions = {
         method: "POST",
@@ -160,22 +151,45 @@ Vue.createApp({
           password: this.returningUserPassword,
         }),
       };
-      fetch("http://localhost:5000/session", requestOptions).then(
-        (response) => {
-          if (response.status == 201) {
-            return response.json().then((userData) => {
-              this.userInfo = userData.user;
-              if (userData.message == "First login") {
-                this.displayNewUserForm();
-              } else if (userData.message == "Authenticated") {
-                this.displayHomePage();
-              }
-            });
-          } else {
-            this.errorMessages.login = "Invalid email or password.";
-          }
-        }
+      const response = await fetch(
+        "http://localhost:5000/session",
+        requestOptions
       );
+      if (response.status == 201) {
+        const userData = await response.json();
+        this.userInfo = userData.user;
+        if (userData.message == "First login") {
+          this.displayNewUserForm();
+        } else if (userData.message == "Authenticated") {
+          alert(
+            "Welcome back, " +
+              this.userInfo.name +
+              "!. Please wait while our bot processes your data and loads your portfolio"
+          );
+          const botResponse = await fetch(
+            "http://localhost:5000/run_trading_bot",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Methods": "POST",
+              },
+            }
+          );
+          if (botResponse.status === 200) {
+            console.log("Bot is running.");
+          } else {
+            console.error("Failed to run bot:", botResponse.statusText);
+          }
+          this.displayHomePage();
+        }
+        this.loadTransactions();
+        this.loadChartData();
+        this.loadPositiveNews();
+      } else {
+        this.errorMessages.login = "Invalid email or password.";
+      }
     },
 
     isEmailValid: function (email) {
@@ -259,6 +273,7 @@ Vue.createApp({
       this.userInfo = {};
       this.transactions = [];
       this.userSymbols = [];
+      this.chartData = [];
       var home = document.getElementById("dashboard_html");
       var signup = document.getElementById("signup_html");
       home.style = "display:none";
@@ -334,11 +349,41 @@ Vue.createApp({
       this.selectedSymbol = symbol;
     },
 
+    async loadPositiveNews() {
+      const response = await fetch("http://localhost:5000/get-positive-news", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "GET",
+        },
+        credentials: "include",
+      });
+      if (response.status !== 200) {
+        console.error("Failed to load positive news:", response.statusText);
+        return;
+      }
+      const data = await response.text();
+      const lines = data.split("\n");
+      this.positiveNews = lines.map((line) => {
+        const [headline, url, sentiment] = line.split(",");
+        return { headline: headline, url: url, sentiment: sentiment };
+      });
+      console.log("Positive News:", this.positiveNews);
+    },
+
     loadChartData: function () {
       var self = this;
-      fetch("http://localhost:5000/get-csv-stats")
+      fetch("http://localhost:5000/get-csv-stats", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "GET",
+        },
+        credentials: "include",
+      })
         .then((response) => response.text())
         .then(function (data) {
+          console.log("Data:", data);
           var parsedData = self.parseCSV(data);
           self.chartData = parsedData;
           self.createChart(parsedData);
@@ -358,10 +403,19 @@ Vue.createApp({
     },
 
     async loadTransactions() {
-      const response = await fetch("http://localhost:5000/get-csv-trades");
+      const response = await fetch("http://localhost:5000/get-csv-trades", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "GET",
+        },
+        credentials: "include",
+      });
+      if (response.status !== 200) {
+        console.error("Failed to load transactions:", response.statusText);
+        return;
+      }
       const data = await response.text();
-      console.log(data);
-
       const rows = data.split("\n").slice(1);
       for (const row of rows) {
         const columns = row.split(",");
@@ -411,6 +465,41 @@ Vue.createApp({
     },
   },
 
+  created: function () {
+    fetch("http://localhost:5000/session", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error("Failed to check session");
+        }
+      })
+      .then((data) => {
+        this.userInfo = data;
+        this.displayHomePage();
+        this.loadTransactions();
+        this.loadChartData();
+        this.loadPositiveNews();
+        this.loadUserInfo();
+        if (this.userInfo.symbols) {
+          for (var i = 0; i < this.userInfo.symbols.length; i++) {
+            this.userSymbols.push(this.userInfo.symbols[i]["symbol"]["symbol"]);
+          }
+        }
+        console.log("User Symbols:", this.userSymbols);
+      })
+      .catch((error) => {
+        console.error("Error checking session:", error);
+        this.displayLogin();
+      });
+  },
+
   mounted: function () {
     fetch("http://localhost:5000/session", {
       method: "GET",
@@ -420,9 +509,14 @@ Vue.createApp({
       .then((userData) => {
         if (userData.user) {
           this.userInfo = userData.user;
-          this.loadChartData();
           this.loadTransactions();
-          this.displayHomePage();
+          this.loadChartData();
+          this.loadUserInfo();
+          this.loadPositiveNews();
+          for (var i = 0; i < this.userInfo.symbols.length; i++) {
+            this.userSymbols.push(this.userInfo.symbols[i]["symbol"]["symbol"]);
+          }
+          console.log("User Symbols:", this.userSymbols);
         }
       })
       .catch((error) => {

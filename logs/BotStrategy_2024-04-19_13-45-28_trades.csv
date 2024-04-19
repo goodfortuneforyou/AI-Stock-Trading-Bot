@@ -1,0 +1,7 @@
+time,strategy,identifier,symbol,side,type,status,multiplier,time_in_force,asset.strike,asset.multiplier,asset.asset_type,price,filled_quantity,trade_cost
+2022-10-28 09:30:00-04:00,BotStrategy,e73f0fd8778e4b0c8e2d9235a6180b90,AMZN,sell,market,new,1,gtc,0.0,1,stock,,,
+2022-10-28 09:30:00-04:00,BotStrategy,e73f0fd8778e4b0c8e2d9235a6180b90,AMZN,sell,market,fill,1,gtc,0.0,1,stock,97.91000366210938,1021.0,0.0
+2023-04-28 09:30:00-04:00,BotStrategy,f18c5dbe836a4da99dbe21ac1eb91622,AMZN,buy,market,new,1,day,0.0,1,stock,,,
+2023-04-28 09:30:00-04:00,BotStrategy,ddc9f9b3bce94f539b394aeaaab2f690,AMZN,buy,market,new,1,gtc,0.0,1,stock,,,
+2023-04-28 09:30:00-04:00,BotStrategy,f18c5dbe836a4da99dbe21ac1eb91622,AMZN,buy,market,fill,1,day,0.0,1,stock,107.7300033569336,1021.0,0.0
+2023-04-28 09:30:00-04:00,BotStrategy,ddc9f9b3bce94f539b394aeaaab2f690,AMZN,buy,market,fill,1,gtc,0.0,1,stock,107.7300033569336,1856.0,0.0
