@@ -58,7 +58,7 @@ Session(app)
 
 
 users = mongo.db.users
-def run_backtest(start, end, symbol, user):
+def run_backtest(start, end, symbol, user, user_budget):
     print('start in run_backtest:', start)  
     print('end in run_backtest:', end)
     end_str = str(end)
@@ -79,6 +79,7 @@ def run_backtest(start, end, symbol, user):
     start,
     end,
     stats_file=stat_file,
+    budget=user_budget,
     benchmark_asset=symbol,
     trades_file=trade_file,
     )
@@ -93,12 +94,14 @@ def run_trading_bot_background():
             user['_id'] = str(user['_id'])
             end = user['most_recent_date']
             start = (datetime.now() - timedelta(days=365)).replace(hour=0, minute=0, second=0, microsecond=0)
-            symbol = user['symbols'][0]['symbol']['symbol']
-            print('User:', user)
-            print('symbol:', symbol)
+            # symbol = user['symbols'][0]['symbol']['symbol']
+            # amount = user['symbols'][0]['symbol']['amount']
+            # print('User:', user)
+            # print('symbol:', symbol)
             passed_id = user['_id']
-            p = Process(target=run_backtest, args=(start, end, symbol, passed_id))
-            p.start()
+            for i in range(len(user['symbols'])):
+                p = Process(target=run_backtest, args=(start, end, user['symbols'][i]['symbol']['symbol'], passed_id, user['symbols'][i]['symbol']['amount']))
+                p.start()
             return jsonify({'message': 'Bot is running'}), 200
     except Exception as e:
         print('Error:', e)
@@ -322,15 +325,16 @@ def get_csv_stats():
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
-def get_most_recent_trades_file():
-    folder_path = os.path.join(os.getcwd(), 'App/logs')
+def get_most_recent_trades_file(i):
+    folder_path = os.path.join(os.getcwd(), '/Users/anjolie/Desktop/SPRING-2024/AI-Stock-Trading-Bot/logs')
+    print('Folder path:', folder_path)
     files = []
     for file in glob.glob(os.path.join(folder_path, '*_trades.csv')):
+        print('File:', file)
         if file.endswith('trades.csv'):
             files.append(file)
-    return files[-1] if files else None
-    
-
+    files.sort(key=os.path.getctime, reverse=True)
+    return files[i] if files else None
 
 @app.route('/get-csv-trades', methods=['GET'])
 def get_csv_trades():
@@ -339,29 +343,33 @@ def get_csv_trades():
         if 'user_id' not in session:
             return jsonify({'error': 'User ID not found in session'}), 404
         
-        user_id = session['user_id']
-        print('User ID:', user_id)
-        
+        user_id = session['user_id']        
         user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
         if user:
             user['_id'] = str(user['_id'])
-            # print('most recent date:', user['most_recent_date'], 'Symbols:', user['symbols']['symbol'])
-
-            # end_name = f"{user['_id']}_{user['most_recent_date']}_{user['symbols']['symbol']}_trades.csv"
-            # print('End name:', end_name)
-            stats_file = get_most_recent_trades_file()
-            if stats_file is None:
-                traceback.print_exc()
+            stats_files = []
+            print('len of symbols:', len(user['symbols']))
+            for i in range(len(user['symbols'])):
+                stats_file = get_most_recent_trades_file(i)
+                if stats_file is not None:
+                    stats_files.append(stats_file)
+            print('Stats files:', stats_files)
+            if stats_files:
+                csv_data = []
+                for file in stats_files:
+                    with open(file, 'r') as f:
+                        csv_data.append(f.read())
+                return jsonify({'csv_data': csv_data}), 200
+            else:
                 return jsonify({'error': 'File not found'}), 404
-            print('Stats file:', stats_file)
-            return send_file(stats_file), 200
         else:
+            print('User not found')
             return jsonify({'error': 'User not found'}), 404
     except Exception as e:
         print(f"Error while trying to send file: {e}")
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
-    
+
 @app.route('/users', methods=['PUT'])
 def update_user():
     try:

@@ -44,8 +44,7 @@
 }
 
 .dashboard_items_excluding_logout ul {
-  padding-bottom: 100px;
-  padding-top: 50px;
+  padding-bottom: 30px;
 }
 .dashboard_items_excluding_logout ul li {
   display: flex;
@@ -123,7 +122,6 @@
   font-size: 35px;
   color: #ffffff;
   margin-top: 10px;
-  margin-bottom: 50px;
 }
 
 .stock_status_box {
@@ -188,7 +186,7 @@
   flex-direction: column;
   align-items: center;
   height: 25vh;
-  width: 100vw;
+  width: 120vw;
   overflow: auto;
   border-radius: 10px;
   background-color: rgba(97, 102, 97, 0.45);
@@ -299,7 +297,6 @@
 .chart_box {
   display: flex;
   align-items: center;
-  padding-top: 20px;
   height: 36vh;
   width: 100vw;
   overflow: auto;
@@ -518,22 +515,23 @@ li {
   background-color: rgb(53, 53, 53);
   padding: 20px;
   margin: 10px auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: auto;
 }
 
 .reports_html h2 {
   font-family: "Roboto", sans-serif;
   font-style: italic;
   font-size: x-large;
+
   color: #ffffff;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 
 .reports_html ul {
   list-style-type: none;
   margin-left: -50px;
-  margin-top: -20px;
 }
 
 .reports_html ul li {
@@ -623,7 +621,6 @@ li {
   font-size: xx-large;
   color: #ffffff;
   padding-top: 20px;
-  padding-bottom: 50px;
   display: grid;
   justify-content: center;
   align-items: center;
@@ -658,6 +655,9 @@ li {
 #edit-info {
   display: none;
 }
+#userInfo {
+  margin-top: -50px;
+}
 
 #userInfo p {
   text-align: left;
@@ -691,4 +691,32 @@ li {
 
 .sign-in-button {
   margin-left: 80px;
+}
+
+.headline {
+  margin-left: 50px;
+}
+
+.reports_title {
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: x-large;
+  color: #ffffff;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.reports_title_html {
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: x-large;
+  color: #ffffff;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.headline_html {
+  margin-left: 75px;
 }

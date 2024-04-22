@@ -338,12 +338,6 @@
                                 {{ current_return > 0 ? '+' : '' }}{{
                                 current_return }}
                               </div>
-                              <div
-                                class="stock_above {{ stockPercent > 0 ? 'green' : 'red' }}"
-                              >
-                                {{ stockPercent > 0 ? '+' : '' }}{{ stockPercent
-                                }}
-                              </div>
                             </span>
                           </div>
                         </div>
@@ -357,25 +351,22 @@
                   </div>
                 </div>
               </div>
+              <h2 class="reports_title">Reports</h2>
               <div class="row">
                 <div class="reports_box">
-                  <div class="row">
-                    <h2>Reports</h2>
-                  </div>
                   <div class="row">
                     <ul>
                       <li v-for="article in positiveNews">
                         <img
                           :src="article.sentiment === 'positive' ? './images/good2go.png' : './images/warning.png'"
                         />
-                        Bot reported a {{ article.sentiment }} sentiment
-                        <a :href="article.url">article</a>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li v-for="article in negativeNews">
-                        {{ article.url}}
-                        <img src="./images/bad.png" />
+                        Bot reported a {{ article.sentiment }} sentiment, check
+                        out this article: <br />
+                        <div class="headline">
+                          <a :href="article.url" target="_blank">
+                            {{ article.headline}}</a
+                          >
+                        </div>
                       </li>
                     </ul>
                   </div>
@@ -394,11 +385,12 @@
                 >
                   <div class="transaction">
                     <li>
-                      {{ transaction.action }} {{ transaction.quantity }} shares
-                      of {{ transaction.symbol }} at ${{ transaction.price }}
+                      {{ transaction.action }} {{ transaction.filled_quantity }}
+                      shares of {{ transaction.symbol }} at ${{
+                      transaction.price }}
                       <br />
                       <br />
-                      Date: {{ transaction.date }}
+                      Date: {{ transaction.time }}
                     </li>
                   </div>
                 </div>
@@ -445,22 +437,19 @@
           </div>
           <div class="reports_html">
             <div class="row">
-              <h2 style="margin-top: -120px">Reports</h2>
-            </div>
-            <div class="row">
               <ul>
+                <h2 class="reports_title_html">Reports</h2>
                 <li v-for="article in positiveNews">
                   <img
                     :src="article.sentiment === 'positive' ? './images/good2go.png' : './images/warning.png'"
                   />
-                  Bot reported a {{ article.sentiment }} sentiment
-                  <a :href="article.url">article</a>
-                </li>
-              </ul>
-              <ul>
-                <li v-for="article in negativeNews">
-                  {{ article.url}}
-                  <img src="./images/bad.png" />
+                  Bot reported a {{ article.sentiment }} sentiment, check out
+                  this article: <br />
+                  <div class="headline_html">
+                    <a :href="article.url" target="_blank">
+                      {{ article.headline}}</a
+                    >
+                  </div>
                 </li>
               </ul>
             </div>
@@ -504,7 +493,9 @@
             </li>
           </div>
           <div class="reports_html">
-            <h2>Transactions</h2>
+            <div class="sticky_box">
+              <h2>Transactions</h2>
+            </div>
             <div class="transactions-html">
               <ul>
                 <div
@@ -518,7 +509,7 @@
                       of {{ transaction.symbol }} at ${{ transaction.price }}
                       <br />
                       <br />
-                      Date: {{ transaction.date }}
+                      Date: {{ transaction.time }}
                     </li>
                   </div>
                 </div>
@@ -570,10 +561,10 @@
                 Deposited history:
                 <br />
                 <li v-for="symbol in userInfo.symbols">
-                  Symbol: {{ symbol.symbol.symbol }}, Amount: {{
-                  symbol.symbol.amount }}
+                  Symbol: {{ symbol.symbol.symbol }}, Amount: $
+                  {{current_port_value}}
                   <button v-on:click="removeSymbol(symbol.symbol)">
-                    delete
+                    withdraw
                   </button>
                 </li>
               </ul>
@@ -631,6 +622,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="vue.js"></script>
   </body>
 </html>

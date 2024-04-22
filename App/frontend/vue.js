@@ -161,29 +161,30 @@ Vue.createApp({
         if (userData.message == "First login") {
           this.displayNewUserForm();
         } else if (userData.message == "Authenticated") {
+          const botResponse = await fetch(
+            "http://localhost:5000/run_trading_bot",
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Methods": "POST",
+              },
+            }
+          );
           alert(
             "Welcome back, " +
               this.userInfo.name +
               "!. Please wait while our bot processes your data and loads your portfolio"
           );
-          // const botResponse = await fetch(
-          //   "http://localhost:5000/run_trading_bot",
-          //   {
-          //     method: "POST",
-          //     credentials: "include",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //       "Access-Control-Allow-Methods": "POST",
-          //     },
-          //   }
-          // );
-          // if (botResponse.status === 200) {
-          //   console.log("Bot is running.");
-          // } else {
-          //   console.error("Failed to run bot:", botResponse.statusText);
-          // }
+          if (botResponse.status === 200) {
+            console.log("Bot is running.");
+          } else {
+            console.error("Failed to run bot:", botResponse.statusText);
+          }
           this.displayHomePage();
         }
+
         this.loadTransactions();
         this.loadChartData();
         this.loadPositiveNews();
@@ -400,6 +401,10 @@ Vue.createApp({
       this.transactions = [];
       this.userSymbols = [];
       this.chartData = [];
+      this.positiveNews = [];
+      this.negativeNews = [];
+      this.current_return = "";
+      this.current_port_value = "";
       var home = document.getElementById("dashboard_html");
       var signup = document.getElementById("signup_html");
       var login = document.getElementById("login_html");
@@ -482,7 +487,6 @@ Vue.createApp({
       this.backgroundColor = "rgba(119, 255, 228, 0.4)";
       this.selectedSymbol = symbol;
     },
-
     async loadPositiveNews() {
       const response = await fetch("http://localhost:5000/get-positive-news", {
         method: "GET",
@@ -498,10 +502,12 @@ Vue.createApp({
       }
       const data = await response.text();
       const lines = data.split("\n");
-      this.positiveNews = lines.map((line) => {
-        const [headline, url, sentiment] = line.split(",");
-        return { headline: headline, url: url, sentiment: sentiment };
-      });
+      this.positiveNews = lines
+        .filter((line) => line.trim() !== "")
+        .map((line) => {
+          const [headline, url, sentiment] = line.split(",");
+          return { headline: headline, url: url, sentiment: sentiment };
+        });
       console.log("Positive News:", this.positiveNews);
     },
 
@@ -536,6 +542,33 @@ Vue.createApp({
         });
     },
 
+    parseCSV: function (data) {
+      return d3.csvParse(data, function (d) {
+        return {
+          datetime: new Date(d.datetime).toLocaleString("en-US", {
+            month: "short",
+            year: "numeric",
+          }),
+          portfolio_value: +d.portfolio_value,
+          todays_return: d.return,
+        };
+      });
+    },
+
+    parseCSVData: function (data) {
+      let csvData = [];
+      data.forEach((file) => {
+        const results = Papa.parse(file, {
+          header: true,
+          dynamicTyping: true,
+        });
+        if (results.data) {
+          csvData.push(...results.data);
+        }
+      });
+      return csvData;
+    },
+
     async loadTransactions() {
       const response = await fetch("http://localhost:5000/get-csv-trades", {
         method: "GET",
@@ -549,47 +582,68 @@ Vue.createApp({
         console.error("Failed to load transactions:", response.statusText);
         return;
       }
-      const data = await response.text();
-      const rows = data.split("\n").slice(1);
-      for (const row of rows) {
-        const columns = row.split(",");
+      const data = await response.json();
+      const csvData = data.csv_data;
+      const parsedData = this.parseCSVData(csvData);
+
+      var transactions = [];
+
+      parsedData.forEach((row) => {
+        console.log("Row:", row);
+
         const transaction = {
-          date: columns[0],
-          strategy: columns[1],
-          symbol: columns[2],
-          side: columns[3],
-          type: columns[4],
-          status: columns[5],
-          multiplier: columns[6],
-          time_in_force: columns[7],
-          asset_strike: columns[8],
-          asset_multiplier: columns[9],
-          asset_type: columns[10],
-          price: columns[11],
-          filled_quantity: columns[12],
-          trade_cost: columns[13],
+          date: row.date,
+          strategy: row.strategy,
+          symbol: row.symbol,
+          side: row.side,
+          type: row.type,
+          status: row.status,
+          multiplier: row.multiplier,
+          time_in_force: row["time_in_force"],
+          asset_strike: row["asset_strike"],
+          asset_multiplier: row["asset_multiplier"],
+          asset_type: row["asset_type"],
+          price: row.price,
+          time: row.time,
+          filled_quantity: row["filled_quantity"],
+          trade_cost: row["trade_cost"],
         };
         if (transaction.price === "" || transaction.price === "0") {
-          continue;
+          return;
         }
         if (transaction.side === "buy") {
           transaction.action = "Bought";
         } else if (transaction.side === "sell") {
           transaction.action = "Sold";
         }
-        transaction.quantity = parseFloat(transaction.filled_quantity).toFixed(
-          0
-        );
-        transaction.price = parseFloat(transaction.price).toFixed(2);
-        transaction.date = new Date(transaction.date).toLocaleString("en-US", {
+        const quantity = parseFloat(transaction.filled_quantity);
+        if (!isNaN(quantity) && quantity !== 0) {
+          transaction.filled_quantity = quantity.toFixed(0);
+        } else {
+          return;
+        }
+        const price = parseFloat(transaction.price);
+        if (!isNaN(price) && price !== 0) {
+          transaction.price = price.toFixed(2);
+        } else {
+          return;
+        }
+        const date = new Date(transaction.time);
+        if (!isNaN(date)) {
+          transaction.time = new Date(date);
+        }
+        transaction.time = date.toLocaleString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
           hour: "numeric",
           minute: "numeric",
         });
-        this.transactions.push(transaction);
-      }
+        transactions.push(transaction);
+      });
+      console.log("Transaction list:", transactions);
+      this.transactions = transactions;
+      console.log("Transactions data member:", this.transactions);
     },
   },
 
