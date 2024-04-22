@@ -166,22 +166,22 @@ Vue.createApp({
               this.userInfo.name +
               "!. Please wait while our bot processes your data and loads your portfolio"
           );
-          const botResponse = await fetch(
-            "http://localhost:5000/run_trading_bot",
-            {
-              method: "POST",
-              credentials: "include",
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Methods": "POST",
-              },
-            }
-          );
-          if (botResponse.status === 200) {
-            console.log("Bot is running.");
-          } else {
-            console.error("Failed to run bot:", botResponse.statusText);
-          }
+          // const botResponse = await fetch(
+          //   "http://localhost:5000/run_trading_bot",
+          //   {
+          //     method: "POST",
+          //     credentials: "include",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //       "Access-Control-Allow-Methods": "POST",
+          //     },
+          //   }
+          // );
+          // if (botResponse.status === 200) {
+          //   console.log("Bot is running.");
+          // } else {
+          //   console.error("Failed to run bot:", botResponse.statusText);
+          // }
           this.displayHomePage();
         }
         this.loadTransactions();
@@ -248,16 +248,26 @@ Vue.createApp({
       var signup = document.getElementById("signup_html");
       var login = document.getElementById("login_html");
       var new_user = document.getElementById("new_user_html");
+      var reports = document.getElementById("reports-container");
+      var preferences = document.getElementById("preferences-container");
+      reports.style = "display:none";
       home.style = "display:block";
       login.style = "display:none";
       signup.style = "display:none";
       new_user.style = "display:none";
+      preferences.style = "display:none";
       document.body.style.background = "black";
     },
 
     displayLogin: function () {
       var login = document.getElementById("login_html");
       var signup = document.getElementById("signup_html");
+      var preferences = document.getElementById("preferences-container");
+      var reports = document.getElementById("reports-container");
+      var transactions = document.getElementById("transactions-container");
+      reports.style = "display:none";
+      transactions.style = "display:none";
+      preferences.style = "display:none";
       login.style = "display:block";
       signup.style = "display:none";
     },
@@ -269,6 +279,122 @@ Vue.createApp({
       login.style = "display:none";
     },
 
+    displayReports: function () {
+      var reports = document.getElementById("reports-container");
+      var dashboard = document.getElementById("dashboard_html");
+      var transactions = document.getElementById("transactions-container");
+      var preferences = document.getElementById("preferences-container");
+      preferences.style = "display:none";
+      transactions.style = "display:none";
+      reports.style = "display:block";
+      dashboard.style = "display:none";
+    },
+
+    displayPreferences: function () {
+      var reports = document.getElementById("reports-container");
+      var transactions = document.getElementById("transactions-container");
+      var dashboard = document.getElementById("dashboard_html");
+      var preferences = document.getElementById("preferences-container");
+      dashboard.style = "display:none";
+      reports.style = "display:none";
+      transactions.style = "display:none";
+      preferences.style = "display:block";
+    },
+
+    displayTransactions: function () {
+      var reports = document.getElementById("reports-container");
+      var dashboard = document.getElementById("dashboard_html");
+      var transactions = document.getElementById("transactions-container");
+      var preferences = document.getElementById("preferences-container");
+      preferences.style = "display:none";
+      reports.style = "display:none";
+      transactions.style = "display:block";
+      dashboard.style = "display:none";
+    },
+
+    displayInput: function () {
+      var newUserHomePage = document.getElementById("user-info");
+      newUserHomePage.style = "display:none";
+      var returningUserHomePage = document.getElementById("edit-info");
+      returningUserHomePage.style = "display:grid";
+      this.userInfoName = this.userInfo.name;
+      this.userInfoBirthday = this.userInfo.birthday;
+      this.userInfoEmail = this.userInfo.email;
+      document.getElementById("nameInput").value = this.userInfoName;
+      document.getElementById("birthdayInput").value = this.userInfoBirthday;
+      document.getElementById("emailInput").value = this.userInfoEmail;
+    },
+
+    updateUserInformation: function () {
+      const userData = {
+        name: this.userInfoName,
+        birthday: this.userInfoBirthday,
+        email: this.userInfoEmail,
+      };
+      console.log("userData: ", userData);
+      fetch(`http://localhost:5000/users`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "PUT",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("User information updated successfully");
+            this.userInfo.name = userData.name;
+            this.userInfo.birthday = userData.birthday;
+            this.userInfo.email = userData.email;
+
+            this.userInfoName = "";
+            this.userInfoBirthday = "";
+            this.userInfoEmail = "";
+
+            var newUserHomePage = document.getElementById("edit-info");
+            newUserHomePage.style = "display:none";
+            var returningUserHomePage = document.getElementById("user-info");
+            returningUserHomePage.style = "display:grid";
+          } else {
+            console.error(
+              "Failed to update user information:",
+              response.statusText
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating user information:", error);
+        });
+    },
+
+    removeSymbol: function (symbol) {
+      console.log("Removing symbol:", symbol);
+      const requestOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Methods": "DELETE",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          symbol: symbol,
+        }),
+      };
+      fetch(`http://localhost:5000/symbols`, requestOptions)
+        .then((response) => {
+          if (response.status === 204) {
+            console.log("Symbol removed successfully");
+            this.loadUserInfo();
+          } else {
+            console.error("Failed to remove symbol:", response.statusText);
+          }
+        })
+        .catch((error) => {
+          console.error("Error removing symbol:", error);
+        });
+    },
+
     signOut: function () {
       this.userInfo = {};
       this.transactions = [];
@@ -276,7 +402,15 @@ Vue.createApp({
       this.chartData = [];
       var home = document.getElementById("dashboard_html");
       var signup = document.getElementById("signup_html");
+      var login = document.getElementById("login_html");
+      var preferences = document.getElementById("preferences-container");
+      var reports = document.getElementById("reports-container");
+      var transactions = document.getElementById("transactions-container");
+      reports.style = "display:none";
+      transactions.style = "display:none";
+      preferences.style = "display:none";
       home.style = "display:none";
+      login.style = "display:none";
       signup.style = "display:block";
       document.body.style.background =
         "linear-gradient(90deg, #3c3b3b 50%, #50827e 50%)";

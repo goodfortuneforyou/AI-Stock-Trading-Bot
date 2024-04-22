@@ -40,31 +40,34 @@
 }
 .home_clicked_item {
   background-color: rgba(127, 255, 212, 0.1);
-  margin-right: -120px;
   border-radius: 50px;
 }
 
+.dashboard_items_excluding_logout ul {
+  padding-bottom: 100px;
+  padding-top: 50px;
+}
 .dashboard_items_excluding_logout ul li {
   display: flex;
-  margin-left: -150px;
   justify-content: space-between;
   padding: 25px;
-  a {
-    text-decoration: none;
-    color: #ffffff;
+  text-decoration: none;
+  color: #ffffff;
+  margin-left: -50px;
 
-    font-family: "Roboto", sans-serif;
-    font-weight: 900;
-    font-style: italic;
-    font-size: x-large;
-  }
-  margin-right: -100px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: x-large;
+  display: block;
+  justify-content: center;
 }
 
 .dashboard_items_excluding_logout li:hover {
   background-color: rgba(127, 255, 212, 0.2);
   transition: background-color 0.7s ease;
   border-radius: 50px;
+  cursor: pointer;
 }
 
 .profile_pic {
@@ -92,7 +95,7 @@
   height: 35px;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 10px;
+  margin-right: 40px;
   margin-top: -10px;
 }
 
@@ -333,7 +336,6 @@ button {
   font-weight: 600;
   cursor: pointer;
   display: block;
-  margin-left: 80px;
 }
 
 .error_messages {
@@ -499,4 +501,194 @@ li {
 
 #dashboard_html {
   display: none;
+}
+#transactions-container {
+  display: none;
+}
+
+#reports-container {
+  display: none;
+}
+
+.reports_html {
+  height: 92vh;
+  width: 60vw;
+  border-radius: 10px;
+  flex-direction: column;
+  background-color: rgb(53, 53, 53);
+  padding: 20px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reports_html h2 {
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: x-large;
+  color: #ffffff;
+}
+
+.reports_html ul {
+  list-style-type: none;
+  margin-left: -50px;
+  margin-top: -20px;
+}
+
+.reports_html ul li {
+  padding: 20px;
+  a {
+    color: #48ddd8;
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+  }
+}
+
+.reports_html {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.reports_html img {
+  height: 8%;
+  width: 8%;
+  margin-bottom: -20px;
+  margin-right: 8px;
+}
+
+.transactions-html {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.transactions_html ul {
+  list-style-type: none;
+}
+
+.transactions_html ul li {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.transactions_html {
+  font-weight: 900;
+  font-size: small;
+  color: #ffffff;
+}
+
+.transaction_box_hmtl {
+  padding: 20px;
+  height: 10vh;
+  width: 20vw;
+  overflow: auto;
+  background-color: rgba(97, 102, 97, 0.45);
+  margin-bottom: 30px;
+}
+
+.transactions_html h2 {
+  position: sticky;
+  top: 0;
+  background-color: #353535;
+  padding: 10px;
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: x-large;
+  color: #ffffff;
+}
+
+.preferences-container {
+  display: none;
+}
+
+.preferences_html {
+  height: 92vh;
+  width: 60vw;
+  border-radius: 10px;
+  flex-direction: column;
+  background-color: rgb(53, 53, 53);
+  padding: 20px;
+  margin: 10px auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.preferences_html h2 {
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: xx-large;
+  color: #ffffff;
+  padding-top: 20px;
+  padding-bottom: 50px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.preferences_html h3 {
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: x-large;
+  color: #ffffff;
+  padding-top: 20px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.portfolio-form-inputs ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-style: italic;
+  font-size: medium;
+}
+
+.portfolio-form-inputs ul li {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#edit-info {
+  display: none;
+}
+
+#userInfo p {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid rgb(19, 53, 77);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  color: #000000;
+  font-family: "Roboto", sans-serif;
+  font-size: medium;
+}
+
+#userInfo input {
+  padding: 10px;
+  background-color: #a3a2a2;
+  border-radius: 5px;
+  border: none;
+}
+
+#userInfo button {
+  cursor: pointer;
+  display: grid;
+  justify-content: center;
+}
+
+#trash {
+  width: 10px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.sign-in-button {
+  margin-left: 80px;
 }

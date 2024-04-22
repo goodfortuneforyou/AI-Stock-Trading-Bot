@@ -362,6 +362,52 @@ def get_csv_trades():
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
     
+@app.route('/users', methods=['PUT'])
+def update_user():
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+        birthday = data.get('birthday')
+        user_id = session['user_id']
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            query = {'_id': ObjectId(user_id)}
+            new_values = {'$set': {'name': name, 'email': email, 'birthday': birthday}}
+            mongo.db.users.update_one(query, new_values)
+            return jsonify({'message': 'User updated successfully'}), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+  
+@app.route('/symbols', methods=['DELETE'])
+def delete_symbol():
+    try:
+        data = request.get_json()
+        symbol = data.get('symbol')
+        print('Symbol:', symbol)
+        user_id = session['user_id']
+        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
+        if user:
+            print('user symbols:', user['symbols'])
+            for item in user['symbols']:
+                if item['symbol'] == symbol:
+                    user['symbols'].remove(item)
+                    query = {'_id': ObjectId(user_id)}
+                    new_values = {'$set': {'symbols': user['symbols']}}
+                    mongo.db.users.update_one(query, new_values)
+                    return jsonify({'message': 'Symbol deleted successfully'}), 204
+            print('Symbol not found')
+            return jsonify({'error': 'Symbol not found'}), 404
+        else:
+            print('User not found')
+            return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        print('Exception:', e)
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
 
 # @app.route('/get_news', methods=['GET'])
 # def get_news():
