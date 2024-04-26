@@ -36,6 +36,7 @@ random_positive_file_name = None
 
 class BotStrategy(Strategy): 
     
+    # Initialize the strategy and create random file to write the news to
     def initialize(self):
         self.sleeptime = "1D"
         self.api = REST(base_url=BASE_URL, key_id=API_KEY, secret_key=API_SECRET)
@@ -50,11 +51,13 @@ class BotStrategy(Strategy):
         self.random_positive_file_name = random_positive_file_name
         print("self.symbol", self.symbol)   
 
+
     def get_dates(self):
         today = self.get_datetime()
         three_days_prior = today - Timedelta(days=3)
         return today.strftime("%Y-%m-%d"), three_days_prior.strftime("%Y-%m-%d")
     
+    # after you have gotten the dates feed them into the machine learning model and write the articles to a file
     def get_sentiment(self):
         today, three_days_prior = self.get_dates()
         news = self.api.get_news(symbol=self.symbol, start=three_days_prior, end=today)
@@ -74,11 +77,12 @@ class BotStrategy(Strategy):
         return probability, sentiment
 
     def on_trading_iteration(self):
+        # get the last price for the symbol
         last_price = self.get_last_price(self.symbol)
         quantity = self.cash // last_price
         probability, sentiment = self.get_sentiment()
         if self.cash > last_price:
-            # if the sentiment is positive and the probability for gain is high, buy the stock
+            # if the sentiment is positive and the probability for gain is high, buy the stock and sell all if the last trade was a sell
             if sentiment == "positive" and probability > 0.999:
                 if self.last_trade == "sell":
                     self.sell_all()
@@ -86,7 +90,7 @@ class BotStrategy(Strategy):
                 self.submit_order(order)
                 self.last_trade = "buy"
             
-            #if the news indicates a negative sentiment and the probability for loss is high, sell the stock
+            #if the news indicates a negative sentiment and the probability for loss is high, sell the stock and buy all if the last trade was a buy
             elif sentiment == "negative" and probability > 0.999:
                 if self.last_trade == "buy":
                     self.sell_all()
@@ -95,16 +99,3 @@ class BotStrategy(Strategy):
                 self.last_trade = "sell"
 
 
-# if __name__ == "__main__":
-#     start = datetime(2022, 2, 1)
-#     end = datetime(2024, 4, 18)
-#     BENCHMARK_ASSET = "AAPL"
-
-#     backtest = BotStrategy.backtest(
-#         YahooDataBacktesting,
-#         start,   
-#         end,
-#         stats_file="stats.csv",
-#         benchmark_asset=BENCHMARK_ASSET,
-#         trades_file="trades.csv",
-#     )

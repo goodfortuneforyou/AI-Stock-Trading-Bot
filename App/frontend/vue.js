@@ -24,13 +24,12 @@ Vue.createApp({
       amount: 0,
       stockPercent: 0,
       userSymbols: [],
-      negativeNews: [],
       positiveNews: [],
     };
   },
 
-  // object with more keys inside it.
   methods: {
+    // fetch the session data and load the users information accordingly
     loadUserInfo: function () {
       fetch("http://localhost:5000/session", {
         method: "GET",
@@ -43,6 +42,7 @@ Vue.createApp({
         });
     },
 
+    //make sure the emaila and password are not empty
     validateReturningUserInputs: function () {
       this.errorMessages = {};
       if (
@@ -60,6 +60,7 @@ Vue.createApp({
       return Object.keys(this.errorMessages).length == 0;
     },
 
+    //make sure the inputs are not empty, birthday is valid date, the email has *@*.*, and the password is at least 8 characters
     isNewUserValid: function () {
       this.errorMessages = {};
       if (this.newUserName == undefined || this.newUserName == "") {
@@ -91,6 +92,7 @@ Vue.createApp({
     },
 
     addUser: function () {
+      //check if the inputs are valid
       if (!this.isNewUserValid()) return;
       const requestOptions = {
         method: "POST",
@@ -99,6 +101,7 @@ Vue.createApp({
           "Access-Control-Allow-Methods": "POST",
         },
         credentials: "include",
+        //send input values to the server
         body: JSON.stringify({
           name: this.newUserName,
           birthday: this.newUserBirthday,
@@ -110,7 +113,7 @@ Vue.createApp({
       fetch("http://localhost:5000/users", requestOptions).then((response) => {
         if (response.status == 201) {
           console.log("user added.");
-          //hide the sign up screen
+          //clear the input fields and display the login page
           this.newUserName = "";
           this.newUserBirthday = "";
           this.newUserEmail = "";
@@ -120,32 +123,16 @@ Vue.createApp({
       });
     },
 
-    logoutUser: function () {
-      if (!this.validateReturningUserInputs()) return;
-      fetch("http://localhost:5000/session", {
-        method: "DELETE",
-        credentials: "include",
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            this.signOut();
-          } else {
-            console.error("Failed to logout:", response.statusText);
-          }
-        })
-        .catch((error) => {
-          console.error("Error logging out:", error);
-        });
-    },
-
     loginUser: async function () {
-      // if (!this.validateReturningUserInputs()) return;
+      //check if the inputs are valid
+      if (!this.validateReturningUserInputs()) return;
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
+        //send input values to the server
         body: JSON.stringify({
           email: this.returningUserEmail,
           password: this.returningUserPassword,
@@ -159,8 +146,10 @@ Vue.createApp({
         const userData = await response.json();
         this.userInfo = userData.user;
         if (userData.message == "First login") {
+          //if the user is logging in for the first time, display the new user form
           this.displayNewUserForm();
         } else if (userData.message == "Authenticated") {
+          //if the user is authenticated, display the home page and run the bot
           const botResponse = await fetch(
             "http://localhost:5000/run_trading_bot",
             {
@@ -172,6 +161,7 @@ Vue.createApp({
               },
             }
           );
+          //alert the user that the bot is running and may take some time
           alert(
             "Welcome back, " +
               this.userInfo.name +
@@ -184,7 +174,7 @@ Vue.createApp({
           }
           this.displayHomePage();
         }
-
+        //load the user's information
         this.loadTransactions();
         this.loadChartData();
         this.loadPositiveNews();
@@ -193,6 +183,7 @@ Vue.createApp({
       }
     },
 
+    //use regex to check if the email is valid
     isEmailValid: function (email) {
       return String(email)
         .toLowerCase()
@@ -215,12 +206,14 @@ Vue.createApp({
         },
         credentials: "include",
         body: JSON.stringify({
+          //send the selected symbol and amount to the server
           symbols: { symbol: this.selectedSymbol, amount: this.amount },
         }),
       };
       fetch(`http://localhost:5000/symbols`, requestOptions)
         .then((response) => {
           if (response.status === 201) {
+            //if added clear fields and load the user's information
             console.log("Symbol added successfully");
             this.loadUserInfo();
             this.selectedSymbol = "";
@@ -243,6 +236,7 @@ Vue.createApp({
       }
     },
 
+    //since this is a single page application, we use the display functions to show the user the correct page
     displayHomePage: function () {
       this.loadUserInfo();
       var home = document.getElementById("dashboard_html");
@@ -340,10 +334,12 @@ Vue.createApp({
           "Access-Control-Allow-Methods": "PUT",
         },
         credentials: "include",
+        //send the updated user information to the server
         body: JSON.stringify(userData),
       })
         .then((response) => {
           if (response.ok) {
+            //if the user information is updated successfully, update the user information and display the user's home page
             console.log("User information updated successfully");
             this.userInfo.name = userData.name;
             this.userInfo.birthday = userData.birthday;
@@ -378,6 +374,7 @@ Vue.createApp({
           "Access-Control-Allow-Methods": "DELETE",
         },
         credentials: "include",
+        //send the symbol we want to remove, essentially like withdrawing money from the account
         body: JSON.stringify({
           symbol: symbol,
         }),
@@ -386,6 +383,7 @@ Vue.createApp({
         .then((response) => {
           if (response.status === 204) {
             console.log("Symbol removed successfully");
+            // reload info if successful
             this.loadUserInfo();
           } else {
             console.error("Failed to remove symbol:", response.statusText);
@@ -397,12 +395,12 @@ Vue.createApp({
     },
 
     signOut: function () {
+      // clear all the data and display the signup page
       this.userInfo = {};
       this.transactions = [];
       this.userSymbols = [];
       this.chartData = [];
       this.positiveNews = [];
-      this.negativeNews = [];
       this.current_return = "";
       this.current_port_value = "";
       var home = document.getElementById("dashboard_html");
@@ -419,6 +417,7 @@ Vue.createApp({
       signup.style = "display:block";
       document.body.style.background =
         "linear-gradient(90deg, #3c3b3b 50%, #50827e 50%)";
+      //remove the user from the session
       fetch("http://localhost:5000/session", {
         method: "DELETE",
         credentials: "include",
@@ -440,6 +439,7 @@ Vue.createApp({
     },
 
     parseCSV: function (data) {
+      //parse the csv data and return an array of objects
       return d3.csvParse(data, function (d) {
         return {
           datetime: new Date(d.datetime).toLocaleString("en-US", {
@@ -453,6 +453,7 @@ Vue.createApp({
     },
 
     createChart: function (data) {
+      //create a chart using the parsed data, use datetime as the x-axis and portfolio value as the y-axis
       var labels = data.map(function (d) {
         return d.datetime;
       });
@@ -461,6 +462,7 @@ Vue.createApp({
         return d.portfolio_value;
       });
 
+      //create the chart
       var ctx = document.getElementById("myChart").getContext("2d");
       var myChart = new Chart(ctx, {
         type: "line",
@@ -484,10 +486,13 @@ Vue.createApp({
     },
 
     changeBackgroundColor: function (symbol) {
+      //change the background color of the selected symbol
       this.backgroundColor = "rgba(119, 255, 228, 0.4)";
       this.selectedSymbol = symbol;
     },
+
     async loadPositiveNews() {
+      //load the positive news from the server
       const response = await fetch("http://localhost:5000/get-positive-news", {
         method: "GET",
         headers: {
@@ -502,9 +507,11 @@ Vue.createApp({
       }
       const data = await response.text();
       const lines = data.split("\n");
+      //parse the data and store it in the positive news array filter out any empty lines
       this.positiveNews = lines
         .filter((line) => line.trim() !== "")
         .map((line) => {
+          //map is like a for loop, it goes through each line and splits it by the comma
           const [headline, url, sentiment] = line.split(",");
           return { headline: headline, url: url, sentiment: sentiment };
         });
@@ -512,6 +519,7 @@ Vue.createApp({
     },
 
     loadChartData: function () {
+      //load the chart data from the server and call the create chart function after parsing the data
       var self = this;
       fetch("http://localhost:5000/get-csv-stats", {
         method: "GET",
@@ -528,6 +536,7 @@ Vue.createApp({
           self.chartData = parsedData;
           self.createChart(parsedData);
 
+          // if there is data, set the current return and portfolio value to the last value in the data
           if (parsedData.length > 0) {
             self.current_return = parseFloat(
               parsedData[parsedData.length - 1].todays_return
@@ -542,20 +551,8 @@ Vue.createApp({
         });
     },
 
-    parseCSV: function (data) {
-      return d3.csvParse(data, function (d) {
-        return {
-          datetime: new Date(d.datetime).toLocaleString("en-US", {
-            month: "short",
-            year: "numeric",
-          }),
-          portfolio_value: +d.portfolio_value,
-          todays_return: d.return,
-        };
-      });
-    },
-
     parseCSVData: function (data) {
+      //seperate csv function to parse transactions data differently than stats data since the data is passed from server differently
       let csvData = [];
       data.forEach((file) => {
         const results = Papa.parse(file, {
@@ -570,6 +567,7 @@ Vue.createApp({
     },
 
     async loadTransactions() {
+      //get the trades file information for each user symbol and parse the data to display it
       const response = await fetch("http://localhost:5000/get-csv-trades", {
         method: "GET",
         headers: {
@@ -588,6 +586,7 @@ Vue.createApp({
 
       var transactions = [];
 
+      //parse the data and store it in the transactions array
       parsedData.forEach((row) => {
         console.log("Row:", row);
 
@@ -608,6 +607,7 @@ Vue.createApp({
           filled_quantity: row["filled_quantity"],
           trade_cost: row["trade_cost"],
         };
+        // if there are any empty values don't display them
         if (transaction.price === "" || transaction.price === "0") {
           return;
         }
@@ -632,6 +632,7 @@ Vue.createApp({
         if (!isNaN(date)) {
           transaction.time = new Date(date);
         }
+        //format the date and time to display it in the correct format
         transaction.time = date.toLocaleString("en-US", {
           month: "short",
           day: "numeric",
@@ -654,6 +655,7 @@ Vue.createApp({
   },
 
   created: function () {
+    // check if the user is logged in and load the user's information
     fetch("http://localhost:5000/session", {
       method: "GET",
       credentials: "include",
@@ -689,6 +691,7 @@ Vue.createApp({
   },
 
   mounted: function () {
+    // keep the user logged in if a session is in place and load the user's information
     fetch("http://localhost:5000/session", {
       method: "GET",
       credentials: "include",
@@ -711,9 +714,4 @@ Vue.createApp({
         console.error("Error fetching user info:", error);
       });
   },
-
-  // IDs and classes only meant for css purposes shouldn't have to query them for js or for automated behaviour tests
-  // created is a function that gets called once when it loads
-  // this is like self in python. this.data_attribute or this.method_name
-  // v-on establishes an event listener its a directive, data binding, rendering
 }).mount("#app");

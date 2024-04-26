@@ -46,6 +46,7 @@ AMOUNT = 0
 
 app = Flask(__name__)
 
+# initialize the database, session, and CORS
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config["MONGO_URI"] = MONGO_URI
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') 
@@ -59,6 +60,7 @@ Session(app)
 
 users = mongo.db.users
 def run_backtest(start, end, symbol, user, user_budget):
+    #run the backtest with the parameters and write to the trades and stats file with the user id, dates, and symbol
     print('start in run_backtest:', start)  
     print('end in run_backtest:', end)
     end_str = str(end)
@@ -69,6 +71,8 @@ def run_backtest(start, end, symbol, user, user_budget):
     print('symbol:', symbol)
     with open('file.txt', 'w') as f:
         f.write(symbol)
+
+    # write the symbol we are testing to a random file so the bot can read it in
     random_positive_file_name = ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=10))
     print('Random positive file name:', random_positive_file_name)
     with open("random_positive_file.txt", "w") as f:
@@ -94,12 +98,10 @@ def run_trading_bot_background():
             user['_id'] = str(user['_id'])
             end = user['most_recent_date']
             start = (datetime.now() - timedelta(days=365)).replace(hour=0, minute=0, second=0, microsecond=0)
-            # symbol = user['symbols'][0]['symbol']['symbol']
-            # amount = user['symbols'][0]['symbol']['amount']
-            # print('User:', user)
-            # print('symbol:', symbol)
             passed_id = user['_id']
             for i in range(len(user['symbols'])):
+                #run the backtest with start(1 year from now), end(last user login), symbol, user id, and amount
+                #run in a process fashion to run multiple backtests at the same time since the bot is single threaded
                 p = Process(target=run_backtest, args=(start, end, user['symbols'][i]['symbol']['symbol'], passed_id, user['symbols'][i]['symbol']['amount']))
                 p.start()
             return jsonify({'message': 'Bot is running'}), 200
@@ -179,6 +181,7 @@ def create_user():
         email = data.get('email')
         password = data.get('password')
         print(name, birthday, email, password)
+        # encrypt the password when creating user
         bcrypt_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
         if not name or not email or not password or not birthday:
             return jsonify({'error': 'Missing required field(s)'}), 400
@@ -236,6 +239,7 @@ def get_csv_by_name(name):
 @app.route('/get-positive-news', methods=['GET'])
 def get_positive_news():
     print('Session:', session)
+    # open the file that the bot wrote the news to and send the information to the user
     try:
         if 'user_id' not in session:
             return jsonify({'error': 'User ID not found in session'}), 404
@@ -247,38 +251,6 @@ def get_positive_news():
         if user:
             user['_id'] = str(user['_id'])
             with open('random_positive_file.txt', 'r') as file:
-                lines = file.readlines()
-                if lines:
-                    last_line = lines[-1].strip()
-                    stats_file = get_csv_by_name(last_line+".csv")
-                    if stats_file is None:
-                        print('File not found')
-                        return jsonify({'error': 'File not found'}), 404
-                    return send_file(stats_file), 200
-                else:
-                    print('No lines found in file')
-                    return jsonify({'error': 'No lines found in file'}), 404
-        else:
-            return jsonify({'error': 'User not found'}), 404
-    except Exception as e:
-        print(f"Error while trying to send file: {e}")
-        traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
-    
-@app.route('/get-negative-news', methods=['GET'])
-def get_negative_news():
-    print('Session:', session)
-    try:
-        if 'user_id' not in session:
-            return jsonify({'error': 'User ID not found in session'}), 404
-        
-        user_id = session['user_id']
-        print('User ID:', user_id)
-        
-        user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
-        if user:
-            user['_id'] = str(user['_id'])
-            with open('random_negative_file.txt', 'r') as file:
                 lines = file.readlines()
                 if lines:
                     last_line = lines[-1].strip()
@@ -309,6 +281,7 @@ def get_csv_stats():
         
         user = mongo.db.users.find_one({'_id': ObjectId(user_id)})
         if user:
+            # if the user exists try to find the stats file we wrote to
             user['_id'] = str(user['_id'])
             print('most recent date:', user['most_recent_date'], 'Symbols:', user['symbols'][0]['symbol']['symbol'])
 
@@ -329,6 +302,7 @@ def get_most_recent_trades_file(i):
     folder_path = os.path.join(os.getcwd(), '/Users/anjolie/Desktop/SPRING-2024/AI-Stock-Trading-Bot/logs')
     print('Folder path:', folder_path)
     files = []
+    # find the most recent trades file in the logs folder
     for file in glob.glob(os.path.join(folder_path, '*_trades.csv')):
         print('File:', file)
         if file.endswith('trades.csv'):
@@ -354,6 +328,7 @@ def get_csv_trades():
                 if stats_file is not None:
                     stats_files.append(stats_file)
             print('Stats files:', stats_files)
+            # send the trades file to the user
             if stats_files:
                 csv_data = []
                 for file in stats_files:
@@ -373,6 +348,7 @@ def get_csv_trades():
 @app.route('/users', methods=['PUT'])
 def update_user():
     try:
+        # grab the user information in the request and set it in the database
         data = request.get_json()
         name = data.get('name')
         email = data.get('email')
@@ -393,6 +369,7 @@ def update_user():
 @app.route('/symbols', methods=['DELETE'])
 def delete_symbol():
     try:
+        # find the symbol and delete it from the user's symbols
         data = request.get_json()
         symbol = data.get('symbol')
         print('Symbol:', symbol)
@@ -416,85 +393,6 @@ def delete_symbol():
         print('Exception:', e)
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
-
-# @app.route('/get_news', methods=['GET'])
-# def get_news():
-#     data = request.get_json()
-#     symbol = data.get('symbol')
-#     bot = BotStrategy()
-#     probabilities, sentiments, good_news, bad_news = bot.get_sentiment(symbol)
-#     return jsonify({'probabilities': probabilities, 'sentiments': sentiments, 'good_news': good_news, 'bad_news': bad_news})
-
-# def scheduled_trade_execution():
-#     users = mongo.db.users.find()
-#     for user in users:
-#         id = str(user['_id'])
-#         symbols = user['symbols']
-#         amount = user['amount']
-#         start_date = user['start_date']
-#         today = datetime.now()
-#         execute_trade(symbols, amount, start_date, today)
-
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(scheduled_trade_execution, 'interval', days=1)
-# scheduler.start()
-
-# @app.route('/users/<string:id>/portfolio', methods=['GET'])
-# def get_portfolio():
-#     data = request.get_json()
-#     id = data.get('id')
-#     user = mongo.db.users.find_one({'_id': ObjectId(id)})
-#     if user:
-#         portfolio = user.get('portfolio')
-#         return jsonify({'portfolio': portfolio}), 200
-#     else:
-#         return jsonify({'error': 'User not found'}), 404
-
-# @app.route('/users/<string:id>/transactions', methods=['GET'])
-# def get_transactions():
-#     data = request.get_json()
-#     id = data.get('id')
-#     user = mongo.db.users.find_one({'_id': ObjectId(id)})
-#     if user:
-#         transactions = user.get('transactions')
-#         return jsonify({'transactions': transactions}), 200
-#     else:
-#         return jsonify({'error': 'User not found'}), 404
-
-# @app.route('/users/<string:id>/execute_trade', methods=['POST'])
-# def execute_trade():
-#     data = request.get_json()
-#     id = data.get('id')
-#     user = mongo.db.users.find_one({'_id': ObjectId(id)})
-#     if user:
-#         symbol = data.get('symbol') 
-#         amount = data.get('amount')
-#         execute_trade_with_bot(id, symbol, amount)
-#         return jsonify({'message': 'Trade executed successfully'}), 200
-#     else:
-#         return jsonify({'error': 'User not found'}), 404
-
-# @app.route('/get_trades', methods=['GET'])
-# def get_trades():
-#     trades = bot.get_trades()  # Fetch trades from BotStrategy
-#     return jsonify({'trades': trades})
-
-# def execute_trade_with_bot(id, symbol, amount):
-#     user = mongo.db.users.find_one({'_id': ObjectId(id)})
-#     if user:
-#         now = datetime.now()
-#         user_start_date = user['start_date']
-#         execute_trade(symbol, amount, user_start_date,  now)
-#         query = {'_id': ObjectId(id)}
-#         user['transactions'].append({'symbols': symbol, 'amount': amount, 'date': now, 'action': 'buy'})
-#         new_values = {'$set': {'transactions': user['transactions']}}
-#         users.update_one(query, new_values)
-#     else:
-#         return jsonify({'error': 'User not found'}), 404
-
-# def execute_trade(symbol, amount, start_date, today):
-#     bot.initialize(API_KEY, API_SECRET, BASE_URL, cash=amount, symbols=symbol, start_date=start_date)
-#     bot.backtest(YahooDataBacktesting, start_date=start_date, end_date=today, benchmark_asset=symbol)
 
 if __name__ == '__main__':
     app.run(debug=True, threaded=True)
