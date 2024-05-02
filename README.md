@@ -14,7 +14,7 @@ This is an AI stock trading bot that is visualized through a web-application. Th
 - Users can edit their user information such as username, email, and birthday.
   
 ## Technical Overview 
-The Frontend: Vue.js, HTML, and CSS. For the back-end: Flask, MongoDB, and python scripts to run the bot. This web-app includes a full user authentication, authorization, validation, and session store system. 
+The Frontend: Vue.js, HTML, and CSS. The backend: Flask, MongoDB, and python scripts to run the bot. This web-app includes a full user authentication, authorization, validation, and session store system. 
 
 This trading bot is built on lumibot which is a trading library that allows backtesting of strategies. The financial data fed into the bot is extracted from the Alpaca trading API and news articles are fetched from Yahoo Finance. 
 
