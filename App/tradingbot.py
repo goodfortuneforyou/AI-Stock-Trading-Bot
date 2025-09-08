@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 import random
 
 
+
 load_dotenv()
 # Get environment variables
 API_KEY = os.getenv('API_KEY')
